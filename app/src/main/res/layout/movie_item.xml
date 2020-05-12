@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:cardCornerRadius="3dp"
+    android:layout_margin="3dp"
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent">
+
+    <ImageView
+        android:id="@+id/imageViewSmallPoster"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        android:contentDescription="@string/poster_of_film"
+        tools:srcCompat="@tools:sample/backgrounds/scenic">
+
+    </ImageView>
+
+</androidx.cardview.widget.CardView>
+

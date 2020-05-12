@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Movies</string>
+    <string name="poster_of_film">Постер к фильму</string>
+    <string name="most_popular">ПОПУЛЯРНОЕ</string>
+    <string name="top_rated">РЕЙТИНГОВОЕ</string>
+    <string name="itemMain">Главная</string>
+    <string name="itemFavourite">Избранное</string>
+</resources>
