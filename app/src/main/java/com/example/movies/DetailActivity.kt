@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.movies.data.Movie
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_detail.*
+//111
 
 class DetailActivity : AppCompatActivity() {
 
