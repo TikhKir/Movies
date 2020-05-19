@@ -5,14 +5,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.movies.R
-import com.example.movies.data.FavouriteMovie
+import com.example.movies.data.Movie
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.favourite_item.view.*
 
 class FavouriteAdapter : RecyclerView.Adapter<FavouriteAdapter.FavouriteViewHolder>() {
 
     var onFavouriteItemClickListener : OnFavouriteItemClickListener? = null
-    var favouriteMovies = listOf<FavouriteMovie>()
+    var favouriteMovies = listOf<Movie>()
     set(value) {
         field = value
         notifyDataSetChanged()

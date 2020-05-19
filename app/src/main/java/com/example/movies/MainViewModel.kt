@@ -74,10 +74,22 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     fun loadData() {
         val disposable = NetworkUtils.getMovies(methodOfSort, 1)
             .map { JSONUtils.getListMovieDataFromJsonObject(it) }
-            .subscribeOn(Schedulers.io())
+            .subscribeOn(Schedulers.single())
             .subscribe({
                     it.map {
-                        database.moviesDao().insertMovie(it)
+                        database.moviesDao().newUpsertMovie(
+                            it.id,
+                            it.voteCount,
+                            it.title,
+                            it.originalTitle,
+                            it.overview,
+                            it.posterPath,
+                            it.bigPosterPath,
+                            it.backdropPath,
+                            it.voteAverage,
+                            it.releaseDate,
+                            it.isFavourite
+                        )
                     }
             }, {
                 Log.e("LOAD_ERROR", it.message)

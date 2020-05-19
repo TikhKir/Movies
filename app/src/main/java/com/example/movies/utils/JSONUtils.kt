@@ -42,7 +42,7 @@ class JSONUtils {
                     val backdropPath = tempObject.getString(KEY_BACKDROP_PATH)
                     val voteAverage = tempObject.getDouble(KEY_VOTE_AVERAGE)
                     val releaseDate = tempObject.getString(KEY_RELEASE_DATE)
-                    val movie = Movie(id, voteCount, title, originalTitle, overview, posterPath, bigPosterPath, backdropPath, voteAverage, releaseDate)
+                    val movie = Movie(id, voteCount, title, originalTitle, overview, posterPath, bigPosterPath, backdropPath, voteAverage, releaseDate, 0)
                     result.add(movie)
                 }
             } catch (e: JSONException) {
@@ -66,7 +66,7 @@ class JSONUtils {
                 val backdropPath = jsonObject.getString(KEY_BACKDROP_PATH)
                 val voteAverage = jsonObject.getDouble(KEY_VOTE_AVERAGE)
                 val releaseDate = jsonObject.getString(KEY_RELEASE_DATE)
-                result = Movie(id, voteCount, title, originalTitle, overview, posterPath, bigPosterPath, backdropPath, voteAverage, releaseDate)
+                result = Movie(id, voteCount, title, originalTitle, overview, posterPath, bigPosterPath, backdropPath, voteAverage, releaseDate, 0)
             } catch (e: JSONException) {
                 Log.e("JSONutils", e.message)
             }

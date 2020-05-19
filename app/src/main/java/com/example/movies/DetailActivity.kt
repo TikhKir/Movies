@@ -9,13 +9,12 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.movies.data.Movie
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_detail.*
-//111
 
 class DetailActivity : AppCompatActivity() {
 
     private lateinit var viewModel: DetailViewModel
     private lateinit var movie: Movie
-    private var isFavourite: Boolean = false
+    private var isFavourite = false
 
     companion object {
         private const val EXTRA_MOVIE_ID = "EXTRA_MOVIE_ID"
@@ -49,26 +48,14 @@ class DetailActivity : AppCompatActivity() {
 
     private fun initViewModel() {
         var movieId = -1
-        var fromFavourite = false
 
         if (intent.hasExtra(EXTRA_MOVIE_ID)) {
             movieId = intent.getIntExtra(EXTRA_MOVIE_ID, -1)
-            fromFavourite = intent.getBooleanExtra(EXTRA_FROM_FAVOURITE_ACTIVITY, false)
         } else finish()
 
         viewModel = ViewModelProvider(this).get(DetailViewModel::class.java)
-        viewModel.loadMovieInfo(movieId, fromFavourite)
+        viewModel.loadMovieInfo(movieId)
 
-
-        viewModel.checkIsFavourite(movieId).observe(this, Observer {
-            if (it == 1) {
-                isFavourite = true
-                imageViewStar.setImageResource(R.drawable.star_icon_gold)
-            } else {
-                isFavourite = false
-                imageViewStar.setImageResource(R.drawable.star_icon_black)
-            }
-        })
 
 
 //        if (fromFavourite && isFavourite) {
@@ -84,9 +71,17 @@ class DetailActivity : AppCompatActivity() {
 //        }
 
 
-        viewModel.getAnyMovieById(movieId, fromFavourite).observe(this, Observer {
+        viewModel.getAnyMovieById(movieId).observe(this, Observer {
             movie = it
             initMovieInfo(movie)
+
+            if (it.isFavourite == 1) {
+                isFavourite = true
+                imageViewStar.setImageResource(R.drawable.star_icon_gold)
+            } else {
+                isFavourite = false
+                imageViewStar.setImageResource(R.drawable.star_icon_black)
+            }
         })
 
     }

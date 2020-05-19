@@ -12,11 +12,11 @@ interface MoviesDao {
     @Query("SELECT * FROM movies WHERE id == :movieId")
     fun getMovieById(movieId: Int): LiveData<Movie>
 
-    @Query("DELETE FROM movies")
+    @Query("DELETE FROM movies WHERE isFavourite = 0")
     fun deleteAllMovies()
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertMovie(movie: Movie)
+    fun insertMovie1(movie: Movie)
 
     @Delete
     fun deleteMovie(movie: Movie)
@@ -25,18 +25,89 @@ interface MoviesDao {
 
 
 
-    @Query("SELECT * FROM favourite_movie")
-    fun getAllFavouriteMovies(): LiveData<List<FavouriteMovie>>
+    @Query("SELECT 1 FROM movies WHERE id = :id LIMIT 1")
+    fun checkInsert(id: Int): Int
 
-    @Query("SELECT * FROM favourite_movie WHERE id == :movieId")
-    fun getFavouriteMovieById(movieId: Int): LiveData<FavouriteMovie>
+    @Query("INSERT INTO movies(id, voteCount, title, originalTitle, overview, posterPath, bigPosterPath, backdropPath, voteAverage, releaseDate, isFavourite) VALUES(:id, :voteCount, :title, :originalTitle, :overview, :posterPath, :bigPosterPath, :backdropPath, :voteAverage, :releaseDate, :isFavourite)")
+    fun insertMovie(
+        id: Int,
+        voteCount: Int?,
+        title: String,
+        originalTitle: String,
+        overview: String,
+        posterPath: String,
+        bigPosterPath: String,
+        backdropPath: String,
+        voteAverage: Double?,
+        releaseDate: String,
+        isFavourite: Int
+    )
 
-    @Delete
-    fun deleteFavouriteMovie(favouriteMovie: FavouriteMovie)
+    @Query("UPDATE movies SET id=:id, voteCount=:voteCount, title=:title, originalTitle=:originalTitle, overview=:overview, posterPath=:posterPath, bigPosterPath=:bigPosterPath, backdropPath=:backdropPath, voteAverage=:voteAverage, releaseDate=:releaseDate WHERE id = :id")
+    fun updateMovie(
+        id: Int,
+        voteCount: Int?,
+        title: String,
+        originalTitle: String,
+        overview: String,
+        posterPath: String,
+        bigPosterPath: String,
+        backdropPath: String,
+        voteAverage: Double?,
+        releaseDate: String
+    )
 
-    @Query("SELECT 1 FROM favourite_movie WHERE id = :id")
+    fun newUpsertMovie(
+        id: Int,
+        voteCount: Int?,
+        title: String,
+        originalTitle: String,
+        overview: String,
+        posterPath: String,
+        bigPosterPath: String,
+        backdropPath: String,
+        voteAverage: Double?,
+        releaseDate: String,
+        isFavourite: Int
+    ) {
+        val tmp = checkInsert(id)
+        if (tmp == 1) {
+            updateMovie(id, voteCount, title, originalTitle, overview, posterPath, bigPosterPath, backdropPath, voteAverage, releaseDate)
+        } else {
+            insertMovie(id, voteCount, title, originalTitle, overview, posterPath, bigPosterPath, backdropPath, voteAverage, releaseDate, isFavourite)
+        }
+    }
+
+
+//    @Query("INSERT OR REPLACE INTO movies(id, voteCount, title, originalTitle, overview, posterPath, bigPosterPath, backdropPath, voteAverage, releaseDate, isFavourite) VALUES(:id, :voteCount, :title, :originalTitle, :overview, :posterPath, :bigPosterPath, :backdropPath, :voteAverage, :releaseDate, :isFavourite) ON CONFLICT(id) DO UPDATE SET id=:id, voteCount=:voteCount, title=:title, originalTitle=:originalTitle, overview=:overview, posterPath=:posterPath, bigPosterPath=:bigPosterPath, backdropPath=:backdropPath, voteAverage=:voteAverage, releaseDate=:releaseDate")
+//    fun upsertMovie(
+//        id: Int,
+//        voteCount: Int?,
+//        title: String,
+//        originalTitle: String,
+//        overview: String,
+//        posterPath: String,
+//        bigPosterPath: String,
+//        backdropPath: String,
+//        voteAverage: Double?,
+//        releaseDate: String,
+//        isFavourite: Int?
+//    )
+
+
+
+
+
+
+    @Query("SELECT * FROM movies WHERE isFavourite = 1")
+    fun getAllFavouriteMovies(): LiveData<List<Movie>>
+
+    @Query("SELECT 1 FROM movies WHERE id = :id AND isFavourite = 1")
     fun checkIsFavourite(id: Int): LiveData<Int>
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertFavouriteMovie(favouriteMovie: FavouriteMovie)
+    @Query("UPDATE movies SET isFavourite = 1 WHERE id = :id")
+    fun setAsFavourite(id: Int)
+
+    @Query("UPDATE movies SET isFavourite = 0 WHERE id = :id")
+    fun setAsNotFavourite(id: Int)
 }
