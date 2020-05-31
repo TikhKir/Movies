@@ -1,15 +1,18 @@
 package com.example.movies.adapters
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.movies.R
 import com.example.movies.data.Movie
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.movie_item.view.*
 
-class MovieAdapter: RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
+class MovieAdapter(private val mContext: Fragment): RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
 
     var onReachEndListener: OnReachEndListener? = null
     var onPosterClickListener: OnPosterClickListener? = null
@@ -29,7 +32,12 @@ class MovieAdapter: RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
             onReachEndListener!!.onReachEnd()
         }
         val movie = movies[position]
-        Picasso.get().load(movie.bigPosterPath).into(holder.imageViewSmallPoster)
+
+        Glide.with(mContext)
+            .load(movie.bigPosterPath)
+            .thumbnail(0.2f)
+            .override(400) //вот это вот хуйня
+            .into(holder.imageViewSmallPoster)
     }
 
     override fun getItemCount(): Int {

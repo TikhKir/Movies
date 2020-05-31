@@ -9,6 +9,9 @@ interface MoviesDao {
     @Query("SELECT * FROM movies")
     fun getAllMovies(): LiveData<List<Movie>>
 
+    @Query("SELECT * FROM movies WHERE searchBy = :method")
+    fun getMoviesBySearchMethod(method: Int): LiveData<List<Movie>>
+
     @Query("SELECT * FROM movies WHERE id == :movieId")
     fun getMovieById(movieId: Int): LiveData<Movie>
 
@@ -28,7 +31,7 @@ interface MoviesDao {
     @Query("SELECT 1 FROM movies WHERE id = :id LIMIT 1")
     fun checkInsert(id: Int): Int
 
-    @Query("INSERT INTO movies(id, voteCount, title, originalTitle, overview, posterPath, bigPosterPath, backdropPath, voteAverage, releaseDate, isFavourite) VALUES(:id, :voteCount, :title, :originalTitle, :overview, :posterPath, :bigPosterPath, :backdropPath, :voteAverage, :releaseDate, :isFavourite)")
+    @Query("INSERT INTO movies(id, voteCount, title, originalTitle, overview, posterPath, bigPosterPath, backdropPath, voteAverage, releaseDate, isFavourite, searchBy) VALUES(:id, :voteCount, :title, :originalTitle, :overview, :posterPath, :bigPosterPath, :backdropPath, :voteAverage, :releaseDate, :isFavourite, :searchBy)")
     fun insertMovie(
         id: Int,
         voteCount: Int?,
@@ -40,7 +43,8 @@ interface MoviesDao {
         backdropPath: String,
         voteAverage: Double?,
         releaseDate: String,
-        isFavourite: Int
+        isFavourite: Int,
+        searchBy: Int
     )
 
     @Query("UPDATE movies SET id=:id, voteCount=:voteCount, title=:title, originalTitle=:originalTitle, overview=:overview, posterPath=:posterPath, bigPosterPath=:bigPosterPath, backdropPath=:backdropPath, voteAverage=:voteAverage, releaseDate=:releaseDate WHERE id = :id")
@@ -68,31 +72,17 @@ interface MoviesDao {
         backdropPath: String,
         voteAverage: Double?,
         releaseDate: String,
-        isFavourite: Int
+        isFavourite: Int,
+        searchBy: Int
     ) {
         val tmp = checkInsert(id)
         if (tmp == 1) {
             updateMovie(id, voteCount, title, originalTitle, overview, posterPath, bigPosterPath, backdropPath, voteAverage, releaseDate)
         } else {
-            insertMovie(id, voteCount, title, originalTitle, overview, posterPath, bigPosterPath, backdropPath, voteAverage, releaseDate, isFavourite)
+            insertMovie(id, voteCount, title, originalTitle, overview, posterPath, bigPosterPath, backdropPath, voteAverage, releaseDate, isFavourite, searchBy)
         }
     }
 
-
-//    @Query("INSERT OR REPLACE INTO movies(id, voteCount, title, originalTitle, overview, posterPath, bigPosterPath, backdropPath, voteAverage, releaseDate, isFavourite) VALUES(:id, :voteCount, :title, :originalTitle, :overview, :posterPath, :bigPosterPath, :backdropPath, :voteAverage, :releaseDate, :isFavourite) ON CONFLICT(id) DO UPDATE SET id=:id, voteCount=:voteCount, title=:title, originalTitle=:originalTitle, overview=:overview, posterPath=:posterPath, bigPosterPath=:bigPosterPath, backdropPath=:backdropPath, voteAverage=:voteAverage, releaseDate=:releaseDate")
-//    fun upsertMovie(
-//        id: Int,
-//        voteCount: Int?,
-//        title: String,
-//        originalTitle: String,
-//        overview: String,
-//        posterPath: String,
-//        bigPosterPath: String,
-//        backdropPath: String,
-//        voteAverage: Double?,
-//        releaseDate: String,
-//        isFavourite: Int?
-//    )
 
 
 

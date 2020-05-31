@@ -5,4 +5,10 @@
     <string name="top_rated">РЕЙТИНГОВОЕ</string>
     <string name="itemMain">Главная</string>
     <string name="itemFavourite">Избранное</string>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_main2">Main2Activity</string>
+    <string name="tab_text_1">Tab 1</string>
+    <string name="tab_text_2">Tab 2</string>
+    <string name="chucker_response">error_tab_position</string>
 </resources>

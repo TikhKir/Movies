@@ -12,7 +12,10 @@ import io.reactivex.Completable
 import io.reactivex.CompletableObserver
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
+import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.schedulers.Schedulers
+import java.io.IOException
+import java.net.SocketException
 
 class DetailViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -26,11 +29,6 @@ class DetailViewModel(application: Application) : AndroidViewModel(application) 
         return movieLiveData
     }
 
-
-//    fun checkIsFavourite(id: Int): LiveData<Int> {
-//        isFavourite = database.moviesDao().checkIsFavourite(id)
-//        return isFavourite
-//    }
 
     fun addMovieToFavourite(movie: Movie) {
         Completable.fromAction {
@@ -88,7 +86,8 @@ class DetailViewModel(application: Application) : AndroidViewModel(application) 
                         it.backdropPath,
                         it.voteAverage,
                         it.releaseDate,
-                        it.isFavourite
+                        it.isFavourite,
+                        0
                     ) }
             }, {
                 Log.e("LOAD_DETAIL_ERROR", it.message)

@@ -2,57 +2,44 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/colorPrimaryDark"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorPrimaryDark"
     tools:context=".MainActivity">
 
-
-    <Switch
-        android:id="@+id/switchSort"
-        android:layout_width="wrap_content"
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabLayout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="165dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="164dp"
-        android:textColorHighlight="#989898"
-        android:textColorLink="#FFFFFF"
+        app:tabMode="fixed"
+        app:tabGravity="fill"
+        app:tabTextColor="@color/white_color"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
 
-    <TextView
-        android:id="@+id/textViewPopularity"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:text="@string/most_popular"
-        android:textColor="@color/white_color"
-        app:layout_constraintBottom_toBottomOf="@+id/switchSort"
-        app:layout_constraintEnd_toStartOf="@+id/switchSort"
-        app:layout_constraintTop_toTopOf="@+id/switchSort" />
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/tabItemPopularity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Популярное"/>
 
-    <TextView
-        android:id="@+id/textViewTopRated"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:text="@string/top_rated"
-        android:textColor="@color/white_color"
-        app:layout_constraintBottom_toBottomOf="@+id/switchSort"
-        app:layout_constraintStart_toEndOf="@+id/switchSort"
-        app:layout_constraintTop_toTopOf="@+id/switchSort" />
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/tabItemTopRated"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Рейтинговое"/>
 
-    <androidx.recyclerview.widget.RecyclerView
-        tools:listitem="@layout/movie_item"
-        android:id="@+id/recyclerViewPosters"
-        android:layout_width="0dp"
+    </com.google.android.material.tabs.TabLayout>
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/VPMain"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/switchSort" />
+        app:layout_constraintTop_toBottomOf="@+id/tabLayout" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

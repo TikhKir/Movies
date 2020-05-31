@@ -16,5 +16,7 @@ data class Movie(
     val backdropPath: String = "",
     val voteAverage: Double? = null,
     val releaseDate: String = "",
-    val isFavourite: Int = 0
+
+    val isFavourite: Int = 0,
+    val searchBy: Int = 0
 )
