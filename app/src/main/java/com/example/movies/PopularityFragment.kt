@@ -56,7 +56,7 @@ class PopularityFragment : Fragment() {
     }
 
     private fun initRecyclerView() {
-        recyclerViewPosters.setHasFixedSize(true)
+        //recyclerViewPosters.setHasFixedSize(true)
         recyclerViewPosters.layoutManager = GridLayoutManager(context, 2)
         recyclerViewPosters.adapter = adapter
     }

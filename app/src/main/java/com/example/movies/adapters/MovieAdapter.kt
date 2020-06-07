@@ -36,7 +36,6 @@ class MovieAdapter(private val mContext: Fragment): RecyclerView.Adapter<MovieAd
         Glide.with(mContext)
             .load(movie.bigPosterPath)
             .thumbnail(0.2f)
-            .override(400) //вот это вот хуйня
             .into(holder.imageViewSmallPoster)
     }
 

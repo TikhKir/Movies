@@ -2,16 +2,22 @@ package com.example.movies
 
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.movies.adapters.ReviewAdapter
+import com.example.movies.adapters.TrailerAdapter
 import com.example.movies.data.Movie
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_detail.*
 
 class DetailActivity : AppCompatActivity() {
 
+    private val reviewAdapter = ReviewAdapter()
+    private val trailerAdapter = TrailerAdapter()
     private lateinit var viewModel: DetailViewModel
     private lateinit var movie: Movie
     private var isFavourite = false
@@ -33,6 +39,7 @@ class DetailActivity : AppCompatActivity() {
         setContentView(R.layout.activity_detail)
 
         initViewModel()
+        initRecyclerViews()
         initListeners()
     }
 
@@ -55,7 +62,8 @@ class DetailActivity : AppCompatActivity() {
 
         viewModel = ViewModelProvider(this).get(DetailViewModel::class.java)
         viewModel.loadMovieInfo(movieId)
-
+        viewModel.loadTrailersData(movieId)
+        viewModel.loadReviewsData(movieId)
 
 
 //        if (fromFavourite && isFavourite) {
@@ -84,8 +92,15 @@ class DetailActivity : AppCompatActivity() {
             }
         })
 
-    }
+        viewModel.getTrailers().observe(this, Observer {
+            trailerAdapter.trailers = it
+        })
 
+        viewModel.getReviews().observe(this, Observer {
+            reviewAdapter.reviews = it
+        })
+
+    }
 
     private fun initListeners() {
         fun onActiveStar() {
@@ -103,6 +118,27 @@ class DetailActivity : AppCompatActivity() {
                 onInactiveStar()
             }
         }
+
+        trailerAdapter.onTrailerClickListener = object : TrailerAdapter.OnTrailerClickListener{
+            override fun onTrailerClick(position: Int) {
+                val link = trailerAdapter.trailers[position].key
+                val intentToTrailer = Intent(Intent.ACTION_VIEW, Uri.parse(link))
+                startActivity(intentToTrailer)
+            }
+
+        }
+    }
+
+    private fun initRecyclerViews() {
+        recyclerViewTrailers.setHasFixedSize(true)
+        recyclerViewTrailers.layoutManager =
+            LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        recyclerViewTrailers.adapter = trailerAdapter
+
+        recyclerViewReviews.setHasFixedSize(true)
+        recyclerViewReviews.layoutManager =
+            LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        recyclerViewReviews.adapter = reviewAdapter
     }
 
 

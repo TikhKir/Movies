@@ -29,7 +29,9 @@ class FavouriteAdapter : RecyclerView.Adapter<FavouriteAdapter.FavouriteViewHold
     }
 
     override fun onBindViewHolder(holder: FavouriteViewHolder, position: Int) {
-        Picasso.get().load(favouriteMovies[position].posterPath).into(holder.imageViewPoster)
+        Picasso.get()
+            .load(favouriteMovies[position].posterPath)
+            .into(holder.imageViewPoster)
         holder.textViewTitle.text = favouriteMovies[position].title
         holder.textViewDate.text = favouriteMovies[position].releaseDate
         val votes = "${favouriteMovies[position].voteAverage} (${favouriteMovies[position].voteCount})"

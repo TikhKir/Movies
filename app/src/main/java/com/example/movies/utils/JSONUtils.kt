@@ -2,12 +2,18 @@ package com.example.movies.utils
 
 import android.util.Log
 import com.example.movies.data.Movie
+import com.example.movies.data.Review
+import com.example.movies.data.Trailer
 import org.json.JSONException
 import org.json.JSONObject
 
 class JSONUtils {
 
     companion object {
+
+        const val KEY_YOUTUBE_BASE_URL = "https://www.youtube.com/watch?v="
+
+        //for movies info
         const val KEY_RESULTS = "results"
         const val KEY_VOTE_COUNT = "vote_count"
         const val KEY_ID = "id"
@@ -19,10 +25,57 @@ class JSONUtils {
         const val KEY_VOTE_AVERAGE = "vote_average"
         const val KEY_RELEASE_DATE = "release_date"
 
+        //for comment
+        const val KEY_REVIEW_AUTHOR = "author"
+        const val KEY_REVIEW_CONTENT = "content"
+
+        //for videos
+        const val KEY_VIDEO_KEY = "key"
+        const val KEY_VIDEO_NAME = "name"
+
+        //for images
         const val BASE_POSTER_URL = "https://image.tmdb.org/t/p/"
         const val SMALL_POSTER_SIZE = "w185"
         const val BIG_POSTER_SIZE = "w780"
 
+
+        fun getListReviewsDataFromJsonObject(jsonObject: JSONObject): List<Review> {
+            val jsonArray = jsonObject.getJSONArray(KEY_RESULTS)
+            val result = ArrayList<Review>()
+
+            try {
+                for (i in 0 until jsonArray.length()) {
+                    val tempObject = jsonArray[i] as JSONObject
+
+                    val author = tempObject.getString(KEY_REVIEW_AUTHOR)
+                    val content = tempObject.getString(KEY_REVIEW_CONTENT)
+                    val review = Review(author, content)
+                    result.add(review)
+                }
+            } catch (e: JSONException) {
+                Log.e("JSONutils", e.message)
+            }
+            return result
+        }
+
+        fun getListTrailersDataFromJsonObject(jsonObject: JSONObject): List<Trailer> {
+            val jsonArray = jsonObject.getJSONArray(KEY_RESULTS)
+            val result = ArrayList<Trailer>()
+
+            try {
+                for (i in 0 until jsonArray.length()) {
+                    val tempObject = jsonArray[i] as JSONObject
+
+                    val name = tempObject.getString(KEY_VIDEO_NAME)
+                    val key = KEY_YOUTUBE_BASE_URL + tempObject.getString(KEY_VIDEO_KEY)
+                    val trailer = Trailer(name, key)
+                    result.add(trailer)
+                }
+            } catch (e: JSONException) {
+                Log.e("JSONutils", e.message)
+            }
+            return result
+        }
 
         fun getListMovieDataFromJsonObject(jsonObject: JSONObject): List<Movie> {
             val jsonArray = jsonObject.getJSONArray(KEY_RESULTS)

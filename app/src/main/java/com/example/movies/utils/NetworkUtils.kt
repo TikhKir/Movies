@@ -20,6 +20,8 @@ class NetworkUtils {
 
         private const val PATH_DISCOVER = "discover"
         private const val PATH_MOVIE = "movie"
+        private const val PATH_VIDEOS = "videos"
+        private const val PATH_REVIEWS = "reviews"
 
         private const val LANGUAGE_VALUE = "ru-RU"
         private const val SORT_BY_POPULARITY = "popularity.desc"
@@ -44,6 +46,19 @@ class NetworkUtils {
             val url = buildURL(movieId)
             return jsonLoadSingle(url)
         }
+
+        fun getJSONForVideos(movieId: Int): Single<JSONObject> {
+            val url = buildURLToVideos(movieId)
+            return  jsonLoadSingle(url)
+        }
+
+        fun getJSONForReviews(movieId: Int): Single<JSONObject> {
+            val url = buildURLToReviews(movieId)
+            return  jsonLoadSingle(url)
+        }
+
+
+
 
         private fun buildURL(sortBy: Int, page: Int): URL {
             var result: URL? = null
@@ -70,6 +85,7 @@ class NetworkUtils {
             if (result != null) return result
             else return URL("")
         }
+
         private fun buildURL(movieId: Int): URL {
             var result: URL? = null
 
@@ -88,6 +104,50 @@ class NetworkUtils {
             if (result != null) return result
             else return URL("")
         }
+
+        private fun buildURLToVideos(movieId: Int): URL {
+            var result: URL? = null
+
+            val uri = Uri.parse(BASE_URL).buildUpon()
+                .appendPath(PATH_MOVIE)
+                .appendPath(movieId.toString())
+                .appendPath(PATH_VIDEOS)
+                .appendQueryParameter(PARAMS_API_KEY, API_KEY)
+                .appendQueryParameter(PARAMS_LANGUAGE, LANGUAGE_VALUE)
+                .build()
+
+            try {
+                result = URL(uri.toString())
+            } catch (e: MalformedURLException) {
+                Log.e("buildURL", e.message)
+            }
+            if (result != null) return result
+            else return URL("")
+        }
+
+        private fun buildURLToReviews(movieId: Int): URL {
+            var result: URL? = null
+
+            val uri = Uri.parse(BASE_URL).buildUpon()
+                .appendPath(PATH_MOVIE)
+                .appendPath(movieId.toString())
+                .appendPath(PATH_REVIEWS)
+                .appendQueryParameter(PARAMS_API_KEY, API_KEY)
+                //.appendQueryParameter(PARAMS_LANGUAGE, LANGUAGE_VALUE)
+                .build()
+
+            try {
+                result = URL(uri.toString())
+            } catch (e: MalformedURLException) {
+                Log.e("buildURL", e.message)
+            }
+            if (result != null) return result
+            else return URL("")
+        }
+
+
+
+
 
         private fun jsonLoadSingle(url: URL): Single<JSONObject> {
             return Single.create<JSONObject> {
