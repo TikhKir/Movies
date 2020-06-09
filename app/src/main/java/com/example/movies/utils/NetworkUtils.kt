@@ -23,14 +23,16 @@ class NetworkUtils {
         private const val PATH_VIDEOS = "videos"
         private const val PATH_REVIEWS = "reviews"
 
-        private const val LANGUAGE_VALUE = "ru-RU"
-        private const val SORT_BY_POPULARITY = "popularity.desc"
-        private const val SORT_BY_TOP_RATED = "vote_average.desc"
-
         private const val PARAMS_API_KEY = "api_key"
         private const val PARAMS_LANGUAGE = "language"
         private const val PARAMS_SORT_BY = "sort_by"
         private const val PARAMS_PAGE = "page"
+        private const val PARAMS_MIN_VOTE_COUNT = "vote_count.gte"
+
+        private const val LANGUAGE_VALUE = "ru-RU"
+        private const val SORT_BY_POPULARITY = "popularity.desc"
+        private const val SORT_BY_TOP_RATED = "vote_average.desc"
+        private const val MIN_VOTE_COUNT_VALUE = "1000"
 
         const val POPULARITY = 0
         const val TOP_RATED = 1
@@ -75,6 +77,7 @@ class NetworkUtils {
                 .appendQueryParameter(PARAMS_LANGUAGE, LANGUAGE_VALUE)
                 .appendQueryParameter(PARAMS_SORT_BY, methodOfSort)
                 .appendQueryParameter(PARAMS_PAGE, page.toString())
+                .appendQueryParameter(PARAMS_MIN_VOTE_COUNT, MIN_VOTE_COUNT_VALUE)
                 .build()
 
             try {

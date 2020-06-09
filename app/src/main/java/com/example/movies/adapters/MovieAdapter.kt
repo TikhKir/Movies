@@ -36,6 +36,7 @@ class MovieAdapter(private val mContext: Fragment): RecyclerView.Adapter<MovieAd
         Glide.with(mContext)
             .load(movie.bigPosterPath)
             .thumbnail(0.2f)
+            .override(400)
             .into(holder.imageViewSmallPoster)
     }
 
@@ -59,7 +60,7 @@ class MovieAdapter(private val mContext: Fragment): RecyclerView.Adapter<MovieAd
     }
 
     interface OnReachEndListener {
-        fun onReachEnd();
+        fun onReachEnd()
     }
 
 }

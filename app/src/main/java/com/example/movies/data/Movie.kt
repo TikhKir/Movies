@@ -5,7 +5,6 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "movies")
 data class Movie(
-    @PrimaryKey(autoGenerate = true)
     val id: Int,
     val voteCount: Int? = null,
     val title: String = "",
@@ -19,4 +18,7 @@ data class Movie(
 
     val isFavourite: Int = 0,
     val searchBy: Int = 0
-)
+) {
+    @PrimaryKey(autoGenerate = true)
+    var localId: Int? = null
+}

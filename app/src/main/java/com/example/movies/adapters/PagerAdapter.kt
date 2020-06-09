@@ -1,14 +1,9 @@
-package com.example.movies
+package com.example.movies.adapters
 
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.*
-import androidx.recyclerview.widget.RecyclerView
-import androidx.viewpager.widget.PagerAdapter
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import androidx.viewpager2.widget.ViewPager2
-import kotlinx.android.synthetic.main.item_view_pager.view.*
+import com.example.movies.PopularityFragment
+import com.example.movies.TopRatedFragment
 
 class PagerAdapter(fragmentActivity: FragmentActivity) : FragmentStateAdapter(fragmentActivity) {
 

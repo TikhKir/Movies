@@ -1,6 +1,7 @@
 package com.example.movies
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -56,7 +57,7 @@ class PopularityFragment : Fragment() {
     }
 
     private fun initRecyclerView() {
-        //recyclerViewPosters.setHasFixedSize(true)
+        recyclerViewPosters.setHasFixedSize(true)
         recyclerViewPosters.layoutManager = GridLayoutManager(context, 2)
         recyclerViewPosters.adapter = adapter
     }
@@ -76,6 +77,7 @@ class PopularityFragment : Fragment() {
         adapter.onReachEndListener = object : MovieAdapter.OnReachEndListener {
             override fun onReachEnd() {
                 Toast.makeText(context, "конец списка", Toast.LENGTH_SHORT).show()
+                Log.e("END__OF_LIST", "END OF LIST")
             }
 
         }

@@ -100,7 +100,9 @@ class DetailViewModel(application: Application) : AndroidViewModel(application) 
                         it.releaseDate,
                         it.isFavourite,
                         0
-                    ) }
+                    )
+
+                    }
             }, {
                 Log.e("LOAD_DETAIL_ERROR", it.message)
             })

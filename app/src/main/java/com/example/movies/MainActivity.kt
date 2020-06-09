@@ -7,7 +7,7 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
-import com.example.movies.adapters.MovieAdapter
+import com.example.movies.adapters.PagerAdapter
 import com.google.android.material.tabs.TabLayoutMediator
 import io.reactivex.plugins.RxJavaPlugins
 import kotlinx.android.synthetic.main.activity_main.*
@@ -18,7 +18,6 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var viewPagerAdapter: PagerAdapter
     private lateinit var viewModel: PopularityViewModel
-    //private val adapter = MovieAdapter()
 
     companion object {
         // Added here to not confuse with usages of this variable in onPageSelected()

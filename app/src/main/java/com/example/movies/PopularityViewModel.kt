@@ -2,8 +2,12 @@ package com.example.movies
 
 import android.app.Application
 import android.util.Log
+import androidx.arch.core.util.Function
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
+import androidx.lifecycle.Transformations
 import com.example.movies.data.Movie
 import com.example.movies.data.MoviesDatabase
 import com.example.movies.utils.JSONUtils
@@ -17,18 +21,29 @@ import io.reactivex.schedulers.Schedulers
 class PopularityViewModel(application: Application) : AndroidViewModel(application) {
 
     private val database = MoviesDatabase.getInstance(getApplication())
-    private val popularityMoviesLiveData : LiveData<List<Movie>>
-    private val topRatedMoviesLiveData : LiveData<List<Movie>>
+    private val popularityMoviesLiveData: MutableLiveData<List<Movie>> = MutableLiveData()
+    private val topRatedMoviesLiveData: MutableLiveData<List<Movie>> = MutableLiveData()
     private val compositeDisposable = CompositeDisposable()
 
     init {
-        popularityMoviesLiveData = database.moviesDao().getMoviesBySearchMethod(NetworkUtils.POPULARITY)
-        topRatedMoviesLiveData = database.moviesDao().getMoviesBySearchMethod(NetworkUtils.TOP_RATED)
+        val disposable = database.moviesDao().getMoviesBySearchMethod(NetworkUtils.POPULARITY)
+            .subscribeOn(Schedulers.io())
+            .subscribe({
+                popularityMoviesLiveData.postValue(it)
+            },{
+                Log.e("GET_SINGLE_ERROR", it.message)
+            })
+        compositeDisposable.add(disposable)
+
+        val disposable2 = database.moviesDao().getMoviesBySearchMethod(NetworkUtils.TOP_RATED)
+            .subscribeOn(Schedulers.io())
+            .subscribe({
+                topRatedMoviesLiveData.postValue(it)
+            },{
+                Log.e("GET_SINGLE_ERROR", it.message)
+            })
+        compositeDisposable.add(disposable2)
     }
-
-
-
-
 
     fun getPopularityMovieList(): LiveData<List<Movie>> {
         return popularityMoviesLiveData
@@ -44,34 +59,33 @@ class PopularityViewModel(application: Application) : AndroidViewModel(applicati
             .map { JSONUtils.getListMovieDataFromJsonObject(it) }
             .subscribeOn(Schedulers.single())
             .subscribe({
-                    it.map {
-                        database.moviesDao().newUpsertMovie(
-                            it.id,
-                            it.voteCount,
-                            it.title,
-                            it.originalTitle,
-                            it.overview,
-                            it.posterPath,
-                            it.bigPosterPath,
-                            it.backdropPath,
-                            it.voteAverage,
-                            it.releaseDate,
-                            it.isFavourite,
-                            methodOfSort
-                        )
-                    }
-            }, {
-                Log.e("LOAD_ERROR", it.message)
-            })
+                when (methodOfSort) {
+                    NetworkUtils.POPULARITY -> popularityMoviesLiveData.postValue(it)
+                    NetworkUtils.TOP_RATED -> topRatedMoviesLiveData.postValue(it)
+                }
+
+                it.map {
+                    database.moviesDao().newUpsertMovie(
+                        it.id,
+                        it.voteCount,
+                        it.title,
+                        it.originalTitle,
+                        it.overview,
+                        it.posterPath,
+                        it.bigPosterPath,
+                        it.backdropPath,
+                        it.voteAverage,
+                        it.releaseDate,
+                        it.isFavourite,
+                        methodOfSort
+                    )
+                }
+            },
+                {
+                    Log.e("LOAD_ERROR", it.message)
+                })
         compositeDisposable.add(disposable)
     }
-
-
-
-
-
-
-
 
 
 
