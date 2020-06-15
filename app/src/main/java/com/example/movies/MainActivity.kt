@@ -17,7 +17,6 @@ import java.net.SocketException
 class MainActivity : AppCompatActivity() {
 
     private lateinit var viewPagerAdapter: PagerAdapter
-    private lateinit var viewModel: PopularityViewModel
 
     companion object {
         // Added here to not confuse with usages of this variable in onPageSelected()
@@ -64,68 +63,7 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    //    private fun initViewModel() {
-//        viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
-//        viewModel.getMovieList().observe(this, Observer {
-//            adapter.movies = it
-//        })
-//    }
-//
-//    private fun initRecyclerView() {
-//        recyclerViewPosters.layoutManager = GridLayoutManager(this, 2)
-//        recyclerViewPosters.adapter = adapter
-//    }
-//
-//    private fun initListeners() {
-//
-//        fun onCheckTopRated() {
-//            switchSort.isChecked = true
-//            viewModel.methodOfSort = NetworkUtils.TOP_RATED
-//            viewModel.deleteMovies()
-//            viewModel.loadData()
-//        }
-//
-//        fun onCheckPopularity() {
-//            switchSort.isChecked = false
-//            viewModel.methodOfSort = NetworkUtils.POPULARITY
-//            viewModel.deleteMovies()
-//            viewModel.loadData()
-//        }
-//
-//        switchSort.setOnCheckedChangeListener { buttonView, isChecked ->
-//            if (!isChecked) onCheckPopularity()
-//            else onCheckTopRated()
-//        }
-//
-//        textViewPopularity.setOnClickListener {
-//            if (switchSort.isChecked)
-//                onCheckPopularity()
-//        }
-//
-//        textViewTopRated.setOnClickListener {
-//            if (!switchSort.isChecked)
-//                onCheckTopRated()
-//        }
-//
-//        adapter.onPosterClickListener = object : MovieAdapter.OnPosterClickListener {
-//            override fun onPosterClick(position: Int) {
-//                val id = adapter.movies[position].id
-//                val intent = DetailActivity.getIntent(this@MainActivity, id, false)
-//                startActivity(intent)
-//                Toast.makeText(this@MainActivity, adapter.movies[position].title, Toast.LENGTH_SHORT).show()
-//
-//            }
-//
-//        }
-//
-//        adapter.onReachEndListener = object : MovieAdapter.OnReachEndListener {
-//            override fun onReachEnd() {
-//                Toast.makeText(this@MainActivity, "конец списка", Toast.LENGTH_SHORT).show()
-//            }
-//
-//        }
-//    }
-//
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         val inflater = menuInflater
         inflater.inflate(R.menu.main_menu, menu)

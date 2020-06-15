@@ -4,6 +4,8 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -11,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.movies.adapters.ReviewAdapter
 import com.example.movies.adapters.TrailerAdapter
 import com.example.movies.data.Movie
+import com.example.movies.utils.rxutils.RxComposers
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_detail.*
 
@@ -43,15 +46,24 @@ class DetailActivity : AppCompatActivity() {
         initListeners()
     }
 
+
+
+
+
+
+
+
+
     private fun initMovieInfo(movie: Movie) {
         Picasso.get().load(movie.bigPosterPath).into(imageViewBigPoster)
-        textViewTitle.text = movie.title
+        supportActionBar?.title = movie.title
         textViewOriginalTitle.text = movie.originalTitle
-        textViewRating.text = movie.voteAverage.toString()
+        val voteString =
+            movie.voteAverage.toString() + " (" + movie.voteCount.toString() + getString(R.string.voted_all)
+        textViewRating.text = voteString
         textViewReleaseDate.text = movie.releaseDate
         textViewDescription.text = movie.overview
     }
-
 
     private fun initViewModel() {
         var movieId = -1
@@ -61,54 +73,61 @@ class DetailActivity : AppCompatActivity() {
         } else finish()
 
         viewModel = ViewModelProvider(this).get(DetailViewModel::class.java)
-        viewModel.loadMovieInfo(movieId)
-        viewModel.loadTrailersData(movieId)
-        viewModel.loadReviewsData(movieId)
+
+        viewModel.execute(
+            viewModel.getMovieById(movieId)
+                .compose(RxComposers.applyObservableSchedulers())
+                .subscribe({
+                    it?.let {
+                        movie = it
+                        initMovieInfo(it)
+                    }
+                    if (it?.isFavourite == 1) {
+                        isFavourite = true
+                        imageViewStar.setImageResource(R.drawable.star_icon_gold)
+                    } else {
+                        isFavourite = false
+                        imageViewStar.setImageResource(R.drawable.star_icon_black)
+                    }
+                },{
+                    Log.e("LOAD_MOVIE", it.message)
+                })
+        )
 
 
-//        if (fromFavourite && isFavourite) {
-//            viewModel.getFavouriteMovieById(movieId).observe(this, Observer {
-//                movie = FavouriteMovie.convertToNotFavourite(it)
-//                initMovieInfo(movie)
-//            })
-//        } else {
-//            viewModel.getMovieById(movieId).observe(this, Observer {
-//                movie = it
-//                initMovieInfo(movie)
-//            })
-//        }
 
+        viewModel.execute(
+            viewModel.getTrailers(movieId)
+                .compose(RxComposers.applySingleSchedulers())
+                .subscribe({
+                    trailerAdapter.trailers = it
+                },{
+                    Log.e("LOAD_TRAILERS", it.message)
+                })
+        )
 
-        viewModel.getAnyMovieById(movieId).observe(this, Observer {
-            movie = it
-            initMovieInfo(movie)
+        viewModel.execute(
+            viewModel.getReviews(movieId)
+                .compose(RxComposers.applySingleSchedulers())
+                .subscribe({
+                    reviewAdapter.reviews = it
+                },{
+                    Log.e("LOAD_REVIEWS", it.message)
+                })
+        )
 
-            if (it.isFavourite == 1) {
-                isFavourite = true
-                imageViewStar.setImageResource(R.drawable.star_icon_gold)
-            } else {
-                isFavourite = false
-                imageViewStar.setImageResource(R.drawable.star_icon_black)
-            }
-        })
-
-        viewModel.getTrailers().observe(this, Observer {
-            trailerAdapter.trailers = it
-        })
-
-        viewModel.getReviews().observe(this, Observer {
-            reviewAdapter.reviews = it
-        })
 
     }
 
     private fun initListeners() {
         fun onActiveStar() {
             viewModel.deleteFromFavourite(movie)
+            Toast.makeText(this, getString(R.string.delete_from_favourite), Toast.LENGTH_SHORT).show()
         }
 
         fun onInactiveStar() {
             viewModel.addMovieToFavourite(movie)
+            Toast.makeText(this, getString(R.string.add_to_favourite), Toast.LENGTH_SHORT).show()
         }
 
         imageViewStar.setOnClickListener {

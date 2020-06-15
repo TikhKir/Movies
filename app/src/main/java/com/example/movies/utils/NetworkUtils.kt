@@ -2,6 +2,7 @@ package com.example.movies.utils
 
 import android.net.Uri
 import android.util.Log
+import io.reactivex.Observable
 import io.reactivex.Single
 import org.json.JSONException
 import org.json.JSONObject
@@ -32,7 +33,7 @@ class NetworkUtils {
         private const val LANGUAGE_VALUE = "ru-RU"
         private const val SORT_BY_POPULARITY = "popularity.desc"
         private const val SORT_BY_TOP_RATED = "vote_average.desc"
-        private const val MIN_VOTE_COUNT_VALUE = "1000"
+        private const val MIN_VOTE_COUNT_VALUE = "500"
 
         const val POPULARITY = 0
         const val TOP_RATED = 1

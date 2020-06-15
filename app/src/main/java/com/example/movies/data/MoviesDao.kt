@@ -1,8 +1,10 @@
 package com.example.movies.data
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.room.*
+import androidx.room.Dao
+import androidx.room.Delete
+import androidx.room.Query
+import io.reactivex.Observable
 import io.reactivex.Single
 
 @Dao
@@ -12,16 +14,13 @@ interface MoviesDao {
     fun getAllMovies(): LiveData<List<Movie>>
 
     @Query("SELECT * FROM movies WHERE searchBy = :method")
-    fun getMoviesBySearchMethod(method: Int): Single<List<Movie>>
+    fun getMoviesBySearchMethod(method: Int): Observable<List<Movie>>
 
     @Query("SELECT * FROM movies WHERE id == :movieId")
-    fun getMovieById(movieId: Int): LiveData<Movie>
+    fun getMovieById(movieId: Int): Observable<Movie>
 
     @Query("DELETE FROM movies WHERE isFavourite = 0")
     fun deleteAllMovies()
-
-//    @Insert(onConflict = OnConflictStrategy.REPLACE)
-//    fun insertMovie1(movie: Movie)
 
     @Delete
     fun deleteMovie(movie: Movie)
@@ -92,7 +91,7 @@ interface MoviesDao {
 
 
     @Query("SELECT * FROM movies WHERE isFavourite = 1")
-    fun getAllFavouriteMovies(): LiveData<List<Movie>>
+    fun getAllFavouriteMovies(): Observable<List<Movie>>
 
     @Query("SELECT 1 FROM movies WHERE id = :id AND isFavourite = 1")
     fun checkIsFavourite(id: Int): LiveData<Int>

@@ -5,18 +5,21 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import com.example.movies.data.Movie
 import com.example.movies.data.MoviesDatabase
+import com.example.movies.utils.rxutils.BaseViewModel
+import io.reactivex.Observable
+import io.reactivex.Scheduler
+import io.reactivex.Single
+import io.reactivex.schedulers.Schedulers
 
-class FavouriteViewModel(application: Application): AndroidViewModel(application) {
+class FavouriteViewModel(application: Application): BaseViewModel(application) {
 
     private val database = MoviesDatabase.getInstance(getApplication())
-    private lateinit var favouriteMoviesLiveData : LiveData<List<Movie>>
 
-    fun getFavouriteMoviesFromDB(): LiveData<List<Movie>> {
-        favouriteMoviesLiveData = database.moviesDao().getAllFavouriteMovies()
-        return favouriteMoviesLiveData
+
+    fun getFavouriteMovies(): Observable<List<Movie>> {
+        return database.moviesDao().getAllFavouriteMovies()
+            .subscribeOn(Schedulers.io())
     }
-
-
 
 
 

@@ -1,6 +1,7 @@
 package com.example.movies
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +12,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.movies.adapters.MovieAdapter
 import com.example.movies.utils.NetworkUtils
+import com.example.movies.utils.rxutils.RxComposers
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_popularity.*
 
 class TopRatedFragment : Fragment() {
@@ -48,9 +53,16 @@ class TopRatedFragment : Fragment() {
 
     private fun initViewModel() {
         viewModel = ViewModelProvider(this).get(PopularityViewModel::class.java)
-        viewModel.getTopRatedMovieList().observe(viewLifecycleOwner, Observer {
-            adapter.movies = it
-        })
+
+        viewModel.execute(
+            viewModel.getTopRated()
+                .compose(RxComposers.applyObservableSchedulers())
+                .subscribe({
+                    adapter.movies = it
+                },{
+                    Log.e("ACTIVITY_OPEN_TOP", it.message)
+                })
+        )
     }
 
     private fun initRecyclerView() {
@@ -59,20 +71,23 @@ class TopRatedFragment : Fragment() {
     }
 
     private fun initListeners() {
-        viewModel.loadData(NetworkUtils.TOP_RATED)
 
         adapter.onPosterClickListener = object : MovieAdapter.OnPosterClickListener {
             override fun onPosterClick(position: Int) {
                 val id = adapter.movies[position].id
                 val intent = DetailActivity.getIntent(context!!, id, false)
                 startActivity(intent)
-                Toast.makeText(context, adapter.movies[position].title, Toast.LENGTH_SHORT).show()
             }
         }
 
         adapter.onReachEndListener = object : MovieAdapter.OnReachEndListener {
             override fun onReachEnd() {
-                Toast.makeText(context, "конец списка", Toast.LENGTH_SHORT).show()
+//                if (!viewModel.isLoadingTopRated) {
+                    //viewModel.loadDataTopRated()
+                    Toast.makeText(context, "top_Movies is loading", Toast.LENGTH_SHORT).show()
+                    Log.e("TOP_RATED", "END OF LIST")
+//                }
+
             }
 
         }

@@ -10,7 +10,6 @@ import org.json.JSONObject
 class JSONUtils {
 
     companion object {
-
         const val KEY_YOUTUBE_BASE_URL = "https://www.youtube.com/watch?v="
 
         //for movies info

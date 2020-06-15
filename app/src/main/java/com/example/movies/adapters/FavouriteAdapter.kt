@@ -34,7 +34,8 @@ class FavouriteAdapter : RecyclerView.Adapter<FavouriteAdapter.FavouriteViewHold
             .into(holder.imageViewPoster)
         holder.textViewTitle.text = favouriteMovies[position].title
         holder.textViewDate.text = favouriteMovies[position].releaseDate
-        val votes = "${favouriteMovies[position].voteAverage} (${favouriteMovies[position].voteCount})"
+        val votes =
+            favouriteMovies[position].voteAverage.toString() + " (" + favouriteMovies[position].voteCount + " оценок всего" + ")"
         holder.textViewDescription.text = votes
     }
 

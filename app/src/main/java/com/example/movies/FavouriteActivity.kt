@@ -2,10 +2,12 @@ package com.example.movies
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.movies.adapters.FavouriteAdapter
+import com.example.movies.utils.rxutils.RxComposers
 import kotlinx.android.synthetic.main.activity_favourite.*
 
 class FavouriteActivity : AppCompatActivity() {
@@ -37,9 +39,16 @@ class FavouriteActivity : AppCompatActivity() {
         recyclerViewFavourite.layoutManager = LinearLayoutManager(this)
         recyclerViewFavourite.adapter = adapter
 
-        viewModel.getFavouriteMoviesFromDB().observe(this, Observer {
-            adapter.favouriteMovies = it
-        })
+
+        viewModel.execute(
+            viewModel.getFavouriteMovies()
+                .compose(RxComposers.applyObservableSchedulers())
+                .subscribe({
+                    adapter.favouriteMovies = it
+                },{
+                    Log.e("LOAD_FAV_ERROR", it.message)
+                })
+        )
     }
 
     private fun initViewModel() {
