@@ -1,4 +1,4 @@
-package com.example.movies.data
+package com.example.movies.data.model
 
 data class Review(
     val author: String = "",

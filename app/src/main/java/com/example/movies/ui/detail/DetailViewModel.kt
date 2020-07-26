@@ -1,14 +1,11 @@
-package com.example.movies
+package com.example.movies.ui.detail
 
 import android.app.Application
 import android.util.Log
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import com.example.movies.data.Movie
+import com.example.movies.data.model.Movie
 import com.example.movies.data.MoviesDatabase
-import com.example.movies.data.Review
-import com.example.movies.data.Trailer
+import com.example.movies.data.model.Review
+import com.example.movies.data.model.Trailer
 import com.example.movies.utils.JSONUtils
 import com.example.movies.utils.NetworkUtils
 import com.example.movies.utils.rxutils.BaseViewModel
@@ -16,7 +13,6 @@ import io.reactivex.Completable
 import io.reactivex.CompletableObserver
 import io.reactivex.Observable
 import io.reactivex.Single
-import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 
@@ -24,30 +20,30 @@ class DetailViewModel(application: Application) : BaseViewModel(application) {
     private val database = MoviesDatabase.getInstance(getApplication())
 
 
-    fun getMovieById(movieId: Int): Observable<Movie?> {
-        return NetworkUtils.getMovieByID(movieId)
-            .map { JSONUtils.getMovieDataFromJsonObject(it) }
-            .subscribeOn(Schedulers.io())
-            .doOnSuccess {
-                it?.let { database.moviesDao().newUpsertMovie(
-                    it.id,
-                    it.voteCount,
-                    it.title,
-                    it.originalTitle,
-                    it.overview,
-                    it.posterPath,
-                    it.bigPosterPath,
-                    it.backdropPath,
-                    it.voteAverage,
-                    it.releaseDate,
-                    it.isFavourite,
-                    0
-                )}
-            }
-            .toObservable()
-            .onErrorResumeNext(database.moviesDao().getMovieById(movieId))
-
-    }
+//    fun getMovieById(movieId: Int): Observable<Movie?> {
+//        return NetworkUtils.getMovieByID(movieId)
+//            .map { JSONUtils.getMovieDataFromJsonObject(it) }
+//            .subscribeOn(Schedulers.io())
+//            .doOnSuccess {
+//                it?.let { database.moviesDao().newUpsertMovie(
+//                    it.id,
+//                    it.voteCount,
+//                    it.title,
+//                    it.originalTitle,
+//                    it.overview,
+//                    it.posterPath,
+//                    it.bigPosterPath,
+//                    it.backdropPath,
+//                    it.voteAverage,
+//                    it.releaseDate,
+//                    it.isFavourite,
+//                    0
+//                )}
+//            }
+//            .toObservable()
+//            .onErrorResumeNext(database.moviesDao().getMovieById(movieId))
+//
+//    }
 
     fun getReviews(movieId: Int): Single<List<Review>> {
         return NetworkUtils.getJSONForReviews(movieId)

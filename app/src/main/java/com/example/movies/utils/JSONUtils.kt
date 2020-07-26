@@ -1,9 +1,9 @@
 package com.example.movies.utils
 
 import android.util.Log
-import com.example.movies.data.Movie
-import com.example.movies.data.Review
-import com.example.movies.data.Trailer
+import com.example.movies.data.model.Movie
+import com.example.movies.data.model.Review
+import com.example.movies.data.model.Trailer
 import org.json.JSONException
 import org.json.JSONObject
 
@@ -48,7 +48,8 @@ class JSONUtils {
 
                     val author = tempObject.getString(KEY_REVIEW_AUTHOR)
                     val content = tempObject.getString(KEY_REVIEW_CONTENT)
-                    val review = Review(author, content)
+                    val review =
+                        Review(author, content)
                     result.add(review)
                 }
             } catch (e: JSONException) {
@@ -67,7 +68,8 @@ class JSONUtils {
 
                     val name = tempObject.getString(KEY_VIDEO_NAME)
                     val key = KEY_YOUTUBE_BASE_URL + tempObject.getString(KEY_VIDEO_KEY)
-                    val trailer = Trailer(name, key)
+                    val trailer =
+                        Trailer(name, key)
                     result.add(trailer)
                 }
             } catch (e: JSONException) {
@@ -94,7 +96,19 @@ class JSONUtils {
                     val backdropPath = tempObject.getString(KEY_BACKDROP_PATH)
                     val voteAverage = tempObject.getDouble(KEY_VOTE_AVERAGE)
                     val releaseDate = tempObject.getString(KEY_RELEASE_DATE)
-                    val movie = Movie(id, voteCount, title, originalTitle, overview, posterPath, bigPosterPath, backdropPath, voteAverage, releaseDate, 0)
+                    val movie = Movie(
+                        id,
+                        voteCount,
+                        title,
+                        originalTitle,
+                        overview,
+                        posterPath,
+                        bigPosterPath,
+                        backdropPath,
+                        voteAverage,
+                        releaseDate,
+                        0
+                    )
                     result.add(movie)
                 }
             } catch (e: JSONException) {
@@ -118,7 +132,19 @@ class JSONUtils {
                 val backdropPath = jsonObject.getString(KEY_BACKDROP_PATH)
                 val voteAverage = jsonObject.getDouble(KEY_VOTE_AVERAGE)
                 val releaseDate = jsonObject.getString(KEY_RELEASE_DATE)
-                result = Movie(id, voteCount, title, originalTitle, overview, posterPath, bigPosterPath, backdropPath, voteAverage, releaseDate, 0)
+                result = Movie(
+                    id,
+                    voteCount,
+                    title,
+                    originalTitle,
+                    overview,
+                    posterPath,
+                    bigPosterPath,
+                    backdropPath,
+                    voteAverage,
+                    releaseDate,
+                    0
+                )
             } catch (e: JSONException) {
                 Log.e("JSONutils", e.message)
             }

@@ -1,12 +1,12 @@
-package com.example.movies
+package com.example.movies.ui.favourite
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.movies.adapters.FavouriteAdapter
+import com.example.movies.R
+import com.example.movies.ui.detail.DetailActivity
 import com.example.movies.utils.rxutils.RxComposers
 import kotlinx.android.synthetic.main.activity_favourite.*
 

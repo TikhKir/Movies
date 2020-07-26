@@ -1,4 +1,4 @@
-package com.example.movies
+package com.example.movies.ui.main
 
 import android.content.Intent
 import android.os.Bundle
@@ -7,7 +7,8 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
-import com.example.movies.adapters.PagerAdapter
+import com.example.movies.R
+import com.example.movies.ui.favourite.FavouriteActivity
 import com.google.android.material.tabs.TabLayoutMediator
 import io.reactivex.plugins.RxJavaPlugins
 import kotlinx.android.synthetic.main.activity_main.*
@@ -49,7 +50,8 @@ class MainActivity : AppCompatActivity() {
                     //populateUI(transaction)
                 }
             })
-            currentItem = selectedTabPosition
+            currentItem =
+                selectedTabPosition
         }
 
 

@@ -1,4 +1,4 @@
-package com.example.movies.data
+package com.example.movies.data.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

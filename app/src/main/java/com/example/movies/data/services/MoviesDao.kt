@@ -1,11 +1,12 @@
-package com.example.movies.data
+package com.example.movies.data.services
 
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Query
+import com.example.movies.data.model.Movie
+import io.reactivex.Maybe
 import io.reactivex.Observable
-import io.reactivex.Single
 
 @Dao
 interface MoviesDao {
@@ -14,7 +15,7 @@ interface MoviesDao {
     fun getAllMovies(): LiveData<List<Movie>>
 
     @Query("SELECT * FROM movies WHERE searchBy = :method")
-    fun getMoviesBySearchMethod(method: Int): Observable<List<Movie>>
+    fun getMoviesBySearchMethod(method: Int): Maybe<List<Movie>>
 
     @Query("SELECT * FROM movies WHERE id == :movieId")
     fun getMovieById(movieId: Int): Observable<Movie>
@@ -62,7 +63,7 @@ interface MoviesDao {
         releaseDate: String
     )
 
-    fun newUpsertMovie(
+    fun upsertMovie(
         id: Int,
         voteCount: Int?,
         title: String,

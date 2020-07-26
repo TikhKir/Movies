@@ -5,18 +5,12 @@ import androidx.lifecycle.AndroidViewModel
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 
-open class BaseViewModel(application: Application): AndroidViewModel(application) {
+open class BaseViewModel(application: Application) : AndroidViewModel(application) {
     private val compositeDisposable = CompositeDisposable()
 
-    fun execute(disposable: Disposable){
+    fun execute(disposable: Disposable) {
         compositeDisposable.add(disposable)
     }
-
-
-
-
-
-
 
 
     override fun onCleared() {

@@ -1,11 +1,11 @@
-package com.example.movies.adapters
+package com.example.movies.ui.favourite
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.movies.R
-import com.example.movies.data.Movie
+import com.example.movies.data.model.Movie
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.favourite_item.view.*
 

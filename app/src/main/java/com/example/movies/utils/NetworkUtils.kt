@@ -35,6 +35,8 @@ class NetworkUtils {
         private const val SORT_BY_TOP_RATED = "vote_average.desc"
         private const val MIN_VOTE_COUNT_VALUE = "500"
 
+
+
         const val POPULARITY = 0
         const val TOP_RATED = 1
 

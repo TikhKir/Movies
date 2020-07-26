@@ -1,11 +1,11 @@
-package com.example.movies.adapters
+package com.example.movies.ui.detail
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.movies.R
-import com.example.movies.data.Trailer
+import com.example.movies.data.model.Trailer
 import kotlinx.android.synthetic.main.item_trailer.view.*
 
 class TrailerAdapter : RecyclerView.Adapter<TrailerAdapter.TrailerViewHolder>() {

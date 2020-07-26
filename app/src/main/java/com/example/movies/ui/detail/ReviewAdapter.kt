@@ -1,11 +1,11 @@
-package com.example.movies.adapters
+package com.example.movies.ui.detail
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.movies.R
-import com.example.movies.data.Review
+import com.example.movies.data.model.Review
 import kotlinx.android.synthetic.main.item_review.view.*
 
 class ReviewAdapter : RecyclerView.Adapter<ReviewAdapter.ReviewViewHolder>() {

@@ -1,4 +1,4 @@
-package com.example.movies
+package com.example.movies.ui.detail
 
 import android.content.Context
 import android.content.Intent
@@ -7,12 +7,10 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.movies.adapters.ReviewAdapter
-import com.example.movies.adapters.TrailerAdapter
-import com.example.movies.data.Movie
+import com.example.movies.R
+import com.example.movies.data.model.Movie
 import com.example.movies.utils.rxutils.RxComposers
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_detail.*
@@ -58,8 +56,7 @@ class DetailActivity : AppCompatActivity() {
         Picasso.get().load(movie.bigPosterPath).into(imageViewBigPoster)
         supportActionBar?.title = movie.title
         textViewOriginalTitle.text = movie.originalTitle
-        val voteString =
-            movie.voteAverage.toString() + " (" + movie.voteCount.toString() + getString(R.string.voted_all)
+        val voteString = "${movie.voteAverage} (${movie.voteCount} ${getString(R.string.voted_all)}"
         textViewRating.text = voteString
         textViewReleaseDate.text = movie.releaseDate
         textViewDescription.text = movie.overview
@@ -74,25 +71,25 @@ class DetailActivity : AppCompatActivity() {
 
         viewModel = ViewModelProvider(this).get(DetailViewModel::class.java)
 
-        viewModel.execute(
-            viewModel.getMovieById(movieId)
-                .compose(RxComposers.applyObservableSchedulers())
-                .subscribe({
-                    it?.let {
-                        movie = it
-                        initMovieInfo(it)
-                    }
-                    if (it?.isFavourite == 1) {
-                        isFavourite = true
-                        imageViewStar.setImageResource(R.drawable.star_icon_gold)
-                    } else {
-                        isFavourite = false
-                        imageViewStar.setImageResource(R.drawable.star_icon_black)
-                    }
-                },{
-                    Log.e("LOAD_MOVIE", it.message)
-                })
-        )
+//        viewModel.execute(
+//            viewModel.getMovieById(movieId)
+//                .compose(RxComposers.applyObservableSchedulers())
+//                .subscribe({
+//                    it?.let {
+//                        movie = it
+//                        initMovieInfo(it)
+//                    }
+//                    if (it?.isFavourite == 1) {
+//                        isFavourite = true
+//                        imageViewStar.setImageResource(R.drawable.star_icon_gold)
+//                    } else {
+//                        isFavourite = false
+//                        imageViewStar.setImageResource(R.drawable.star_icon_black)
+//                    }
+//                },{
+//                    Log.e("LOAD_MOVIE", it.message)
+//                })
+//        )
 
 
 

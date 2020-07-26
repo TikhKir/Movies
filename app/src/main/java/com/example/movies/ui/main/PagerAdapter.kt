@@ -1,9 +1,7 @@
-package com.example.movies.adapters
+package com.example.movies.ui.main
 
 import androidx.fragment.app.*
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.example.movies.PopularityFragment
-import com.example.movies.TopRatedFragment
 
 class PagerAdapter(fragmentActivity: FragmentActivity) : FragmentStateAdapter(fragmentActivity) {
 
