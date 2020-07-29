@@ -1,14 +1,12 @@
 package com.example.movies.data
 
 import android.app.Application
-import android.util.Log
 import com.example.movies.constants.SortTypes
 import com.example.movies.data.model.Movie
-import com.example.movies.network.rawmodel.MovieResponse
+import com.example.movies.utils.resultwrapper.Result
+import com.example.movies.utils.resultwrapper.StatusType
 import io.reactivex.Maybe
 import io.reactivex.Observable
-import io.reactivex.Scheduler
-import io.reactivex.schedulers.Schedulers
 
 class DataApiImpl(val application: Application): DataApi {
 

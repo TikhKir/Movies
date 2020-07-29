@@ -47,11 +47,9 @@ class MainActivity : AppCompatActivity() {
             registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) {
                     selectedTabPosition = position
-                    //populateUI(transaction)
                 }
             })
-            currentItem =
-                selectedTabPosition
+            currentItem = selectedTabPosition
         }
 
 

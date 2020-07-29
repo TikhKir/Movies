@@ -32,8 +32,8 @@ interface BaseService {
         const val KEY_YOUTUBE_BASE_URL = "https://www.youtube.com/watch?v="
 
         const val BASE_POSTER_URL = "https://image.tmdb.org/t/p/"
-        const val SMALL_POSTER_SIZE = "w185"
-        const val BIG_POSTER_SIZE = "w780"
+        const val SMALL_POSTER_SIZE = "w200"
+        const val BIG_POSTER_SIZE = "w600"
 
     }
 

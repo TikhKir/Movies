@@ -2,6 +2,7 @@ package com.example.movies.data
 
 import com.example.movies.constants.SortTypes
 import com.example.movies.data.model.Movie
+import com.example.movies.utils.resultwrapper.Result
 import io.reactivex.Maybe
 import io.reactivex.Observable
 

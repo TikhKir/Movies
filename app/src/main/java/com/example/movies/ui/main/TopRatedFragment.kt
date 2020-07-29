@@ -2,28 +2,25 @@ package com.example.movies.ui.main
 
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AbsListView
-import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.movies.R
 import com.example.movies.ui.detail.DetailActivity
-import com.example.movies.utils.rxutils.RxComposers
+import com.example.movies.utils.diffutil.IdentityDiffUtilCallback
 import kotlinx.android.synthetic.main.fragment_popularity.*
-import kotlinx.android.synthetic.main.fragment_popularity.recyclerViewPosters
-import kotlinx.android.synthetic.main.fragment_top_rated.*
 
 class TopRatedFragment : Fragment() {
 
-    private lateinit var viewModel: PopularityViewModel
+    private lateinit var viewModel: MainFragmentsViewModel
     private val layoutManager = GridLayoutManager(context, 2)
-    private val adapter = MovieAdapter(this)
+    private val adapter = MovieListAdapter()
 
     private var isScrolling = false
 
@@ -43,21 +40,20 @@ class TopRatedFragment : Fragment() {
 
 
     private fun initViewModel() {
-        viewModel = ViewModelProvider(this).get(PopularityViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(MainFragmentsViewModel::class.java)
         viewModel.getTopRatedLiveData().observe(viewLifecycleOwner, Observer {
-            adapter.movies = it
+            adapter.submitList(it)
         })
     }
 
     private fun initRecyclerView() {
+        recyclerViewPosters.setHasFixedSize(true)
         recyclerViewPosters.layoutManager = layoutManager
         recyclerViewPosters.adapter = adapter
-
     }
 
     private fun initListeners() {
-
-        adapter.onPosterClickListener = object : MovieAdapter.OnPosterClickListener {
+        adapter.onPosterClickListener = object : MovieListAdapter.OnPosterClickListener {
             override fun onPosterClick(position: Int) {
                 val id = adapter.movies[position].id
                 val intent = DetailActivity.getIntent(context!!, id, false)
@@ -80,16 +76,11 @@ class TopRatedFragment : Fragment() {
 
                 if (isScrolling && (visibleItemCount + pastVisibleItem == total)) {
                     isScrolling = false
-                    viewModel.pageTopRated++
-                    viewModel.loadTopRated()
+                    //viewModel.pageTopRated++
+                    //viewModel.loadTopRated()
                     Log.e("TAG", "SCROLL TRIGGERED")
                 }
             }
-        }
-
-
-        )
-
-
+        })
     }
 }

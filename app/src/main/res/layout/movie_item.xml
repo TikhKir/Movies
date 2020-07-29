@@ -6,12 +6,15 @@
     app:cardCornerRadius="3dp"
     android:layout_margin="3dp"
     android:layout_height="wrap_content"
+    android:focusable="true"
+    android:clickable="true"
     android:layout_width="match_parent">
 
     <ImageView
         android:id="@+id/imageViewSmallPoster"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="300dp"
+        android:scaleType="fitXY"
         android:adjustViewBounds="true"
         android:contentDescription="@string/poster_of_film"
         tools:srcCompat="@tools:sample/backgrounds/scenic">

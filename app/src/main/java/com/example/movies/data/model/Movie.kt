@@ -1,7 +1,9 @@
 package com.example.movies.data.model
 
 import androidx.room.Entity
+import androidx.room.Ignore
 import androidx.room.PrimaryKey
+import com.example.movies.utils.diffutil.Identified
 
 @Entity(tableName = "movies")
 data class Movie(
@@ -17,8 +19,10 @@ data class Movie(
     val releaseDate: String = "",
 
     val isFavourite: Int = 0,
-    val searchBy: Int = 0
-) {
+    val searchBy: Int = 0,
+
+    override val identifier: Int = id
+): Identified {
     @PrimaryKey(autoGenerate = true)
     var localId: Int? = null
 }

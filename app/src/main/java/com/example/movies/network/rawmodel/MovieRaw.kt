@@ -1,7 +1,6 @@
 package com.example.movies.network.rawmodel
 
 import com.example.movies.data.model.Movie
-import com.example.movies.network.NetworkApi
 import com.example.movies.network.services.BaseService
 import com.google.gson.annotations.SerializedName
 

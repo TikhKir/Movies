@@ -1,12 +1,10 @@
 package com.example.movies.network
 
-import android.util.Log
 import com.example.movies.constants.BaseUrl
 import com.example.movies.constants.SortTypes
 import com.example.movies.data.model.Movie
 import com.example.movies.data.model.Review
 import com.example.movies.data.model.Trailer
-import com.example.movies.network.rawmodel.MovieRaw
 import com.example.movies.network.services.BaseService
 import io.reactivex.Single
 import retrofit2.Retrofit
@@ -14,10 +12,6 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 
 class NetworkApiImpl : NetworkApi {
-
-//    companion object {
-//        private const val BASE_URL = "https://api.themoviedb.org/3"
-//    }
 
     private val retrofit = Retrofit.Builder()
         .addConverterFactory(GsonConverterFactory.create())

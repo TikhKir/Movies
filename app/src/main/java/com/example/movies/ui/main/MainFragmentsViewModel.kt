@@ -11,13 +11,12 @@ import com.example.movies.repository.RepositoryApiImpl
 import com.example.movies.utils.rxutils.BaseViewModel
 import com.example.movies.utils.rxutils.RxComposers
 
-class PopularityViewModel(application: Application) : BaseViewModel(application) {
+class MainFragmentsViewModel(application: Application) : BaseViewModel(application) {
 
-    private val database = MoviesDatabase.getInstance(getApplication())
     private val repository = RepositoryApiImpl(getApplication())
 
-    val popularityLiveData = MutableLiveData<List<Movie>>()
-    val topRatedLiveData = MutableLiveData<List<Movie>>()
+    private val popularityLiveData = MutableLiveData<List<Movie>>()
+    private val topRatedLiveData = MutableLiveData<List<Movie>>()
 
     var pageTopRated: Int = 1
     var pagePopularity: Int = 1
@@ -49,11 +48,14 @@ class PopularityViewModel(application: Application) : BaseViewModel(application)
             repository.getMoviesPage(SortTypes.TOP_RATED, pageTopRated)
                 .compose(RxComposers.applyObservableSchedulers())
                 .subscribe({
+                    it.map {
+                        Log.e("VM GET_TOP", " ${it.title} #${it.localId}" )
+                    }
                     topRatedLiveData.postValue(it)
                 },{
-                    Log.e("VM TOP_R", it.message)
+                    Log.e("VM TOP ERROR", it.message)
                 },{
-                    Log.e("VM TOP_R", "Complete")
+                    Log.e("VM_TOP_R", "Complete")
                 })
         )
     }

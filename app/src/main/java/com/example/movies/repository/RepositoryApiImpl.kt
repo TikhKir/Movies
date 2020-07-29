@@ -16,15 +16,9 @@ class RepositoryApiImpl(application: Application): RepositoryApi {
 
 
     override fun getMoviesPage(sortTypes: SortTypes, page: Int): Observable<List<Movie>> {
-        //return getMoviesFromNetworkWithCaching(sortTypes, page)
-            //.switchIfEmpty(databaseSource.getMoviesBySearchMethod(sortTypes))
-            //.onErrorResumeNext(databaseSource.getMoviesBySearchMethod(sortTypes))
-            //изза ошибки не хочет пускать данные а прокидывает ошибку в случае кеширования
-
         return  getMoviesFromNetworkWithCaching(sortTypes, page)
             .startWith(databaseSource.getMoviesBySearchMethod(sortTypes).toObservable())
             .onErrorResumeNext(databaseSource.getMoviesBySearchMethod(sortTypes).toObservable())
-
     }
 
     private fun getMoviesFromNetworkWithCaching(sortTypes: SortTypes, page: Int): Observable<List<Movie>> {
