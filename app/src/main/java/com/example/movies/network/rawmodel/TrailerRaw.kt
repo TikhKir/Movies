@@ -31,7 +31,7 @@ data class TrailerRaw(
     val type: String = ""
 ) {
 
-    fun toTrailer(): Trailer {
+    fun toTrailerDB(): Trailer {
         return Trailer(name, buildYouTubeUrl(key))
     }
 

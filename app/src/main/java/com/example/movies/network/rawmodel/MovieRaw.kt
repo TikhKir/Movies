@@ -49,7 +49,7 @@ data class MovieRaw(
     val genreIds: List<Long>? = null
 ) {
 
-    fun toMovie(): Movie {
+    fun toMovieDB(): Movie {
         return Movie(
             id,
             voteCount,

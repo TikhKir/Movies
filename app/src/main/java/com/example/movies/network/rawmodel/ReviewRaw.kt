@@ -18,7 +18,7 @@ data class ReviewRaw(
     val url: String = ""
 ) {
 
-    fun toReview(): Review {
+    fun toReviewDB(): Review {
         return Review(
             author,
             content

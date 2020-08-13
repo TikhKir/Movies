@@ -1,7 +1,6 @@
 package com.example.movies.data.model
 
 import androidx.room.Entity
-import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import com.example.movies.utils.diffutil.Identified
 

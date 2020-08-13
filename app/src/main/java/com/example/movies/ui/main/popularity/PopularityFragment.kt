@@ -1,7 +1,6 @@
-package com.example.movies.ui.main
+package com.example.movies.ui.main.popularity
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,14 +11,20 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.movies.R
-import com.example.movies.data.model.Review
 import com.example.movies.ui.detail.DetailActivity
+import com.example.movies.ui.main.MovieListAdapter
+import com.example.movies.utils.NpaGridLayoutManager
+import com.example.movies.utils.datatypes.NetworkState
+import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_popularity.*
+import kotlinx.android.synthetic.main.fragment_popularity.recyclerViewPosters
+import kotlinx.android.synthetic.main.fragment_top_rated.*
 
 class PopularityFragment : Fragment() {
 
-    private lateinit var viewModel: MainFragmentsViewModel
-    private val layoutManager = GridLayoutManager(context, 2)
+    private lateinit var viewModel: PopularityViewModel
+    private val layoutManager = NpaGridLayoutManager(context, 2)
     private val adapter = MovieListAdapter()
     private var isScrolling = false
 
@@ -39,31 +44,44 @@ class PopularityFragment : Fragment() {
     }
 
     private fun initViewModel() {
-        viewModel = ViewModelProvider(this).get(MainFragmentsViewModel::class.java)
-        viewModel.getPopularityLiveData().observe(viewLifecycleOwner, Observer {
-            adapter.submitList(it)
+        viewModel = ViewModelProvider(this).get(PopularityViewModel::class.java)
+        viewModel.getMoviesLiveData().observe(viewLifecycleOwner, Observer {
+            adapter.submitList(it.toList())
+        })
+
+        viewModel.getNetworkStateLiveData().observe(viewLifecycleOwner, Observer {
+            progress_bar_popular.visibility =
+                if (viewModel.listIsEmpty() && it == NetworkState.LOADING) View.VISIBLE else View.GONE
+
+            txt_error_popular.visibility =
+                if (viewModel.listIsEmpty() && it == NetworkState.ERROR) View.VISIBLE else View.GONE
+
+            if (!viewModel.listIsEmpty() && it == NetworkState.ERROR) {
+                Snackbar.make(activity!!.VPMain, R.string.connection_error, Snackbar.LENGTH_LONG).show()
+            }
         })
     }
 
     private fun initRecyclerView() {
-        recyclerViewPosters.setHasFixedSize(true)
         recyclerViewPosters.layoutManager = layoutManager
         recyclerViewPosters.adapter = adapter
     }
 
     private fun initListeners() {
-        adapter.onPosterClickListener = object : MovieListAdapter.OnPosterClickListener {
-            override fun onPosterClick(position: Int) {
-                val id = adapter.movies[position].id
-                val intent = DetailActivity.getIntent(context!!, id, false)
-                startActivity(intent)
-            }
-        }
+//        adapter.onPosterClickListener = object :
+//            MovieListAdapter.OnPosterClickListener {
+//            override fun onPosterClick(position: Int) {
+//                val id = adapter.movies[position].id
+//                val intent = DetailActivity.getIntent(context!!, id, false)
+//                startActivity(intent)
+//            }
+//        }
 
         recyclerViewPosters.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
-                if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
+                if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL ||
+                    newState == AbsListView.OnScrollListener.SCROLL_STATE_FLING) {
                     isScrolling = true
                 }
             }
@@ -75,9 +93,8 @@ class PopularityFragment : Fragment() {
 
                 if (isScrolling && (visibleItemCount + pastVisibleItem == total)) {
                     isScrolling = false
-                    //viewModel.pagePopularity++
-                    //viewModel.loadPopularity()
-                    Log.e("TAG", "SCROLL TRIGGERED")
+                    viewModel.loadPopularity()
+                    //Log.e("TAG", "${visibleItemCount} ${pastVisibleItem} ${total}")
                 }
             }
         })

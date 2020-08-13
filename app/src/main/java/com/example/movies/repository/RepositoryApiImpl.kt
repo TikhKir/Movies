@@ -6,6 +6,7 @@ import com.example.movies.constants.SortTypes
 import com.example.movies.data.DataApiImpl
 import com.example.movies.data.model.Movie
 import com.example.movies.network.NetworkApiImpl
+import com.example.movies.utils.datatypes.Result
 import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
 
@@ -15,19 +16,22 @@ class RepositoryApiImpl(application: Application): RepositoryApi {
     val databaseSource = DataApiImpl(application)
 
 
-    override fun getMoviesPage(sortTypes: SortTypes, page: Int): Observable<List<Movie>> {
+    override fun getMoviesPage(sortTypes: SortTypes, page: Int): Observable<Result<List<Movie>>> {
         return  getMoviesFromNetworkWithCaching(sortTypes, page)
-            .startWith(databaseSource.getMoviesBySearchMethod(sortTypes).toObservable())
+//            .startWith(databaseSource.getMoviesBySearchMethod(sortTypes).toObservable())
             .onErrorResumeNext(databaseSource.getMoviesBySearchMethod(sortTypes).toObservable())
     }
 
-    private fun getMoviesFromNetworkWithCaching(sortTypes: SortTypes, page: Int): Observable<List<Movie>> {
+    private fun getMoviesFromNetworkWithCaching(sortTypes: SortTypes, page: Int): Observable<Result<List<Movie>>> {
         return networkSource.getMovies(sortTypes, page)
             .observeOn(Schedulers.single())
             .doOnSuccess {
-                it.map {
+                var temp = 0
+                it.data?.map {
                     databaseSource.upsertMovie(it, sortTypes)
+                    temp++
                 }
+//                Log.e("INSERT", "$temp ${sortTypes.name}" )
             }
             .observeOn(Schedulers.io())
             .toObservable()

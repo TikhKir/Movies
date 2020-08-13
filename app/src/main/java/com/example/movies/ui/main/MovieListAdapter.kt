@@ -1,5 +1,6 @@
 package com.example.movies.ui.main
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,8 +17,6 @@ class MovieListAdapter :
     ListAdapter<Identified, RecyclerView.ViewHolder>(IdentityDiffUtilCallback<Identified>()) {
 
     var onPosterClickListener: OnPosterClickListener? = null
-    var movies = listOf<Movie>()
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.movie_item, parent, false)
@@ -38,7 +37,7 @@ class MovieListAdapter :
 
         fun bind(movie: Movie?) {
             Glide.with(itemView.context)
-                .load(movie?.backdropPath)
+                .load(movie?.posterPath)
                 .into(itemView.imageViewSmallPoster)
         }
     }

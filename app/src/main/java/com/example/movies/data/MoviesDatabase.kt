@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 import com.example.movies.data.model.Movie
 import com.example.movies.data.services.MoviesDao
 
-@Database(entities = [Movie::class], version = 10, exportSchema = false)
+@Database(entities = [Movie::class], version = 11, exportSchema = false)
 abstract class MoviesDatabase: RoomDatabase() {
 
     companion object {

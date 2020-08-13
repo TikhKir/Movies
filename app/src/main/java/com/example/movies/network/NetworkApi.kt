@@ -4,11 +4,12 @@ import com.example.movies.constants.SortTypes
 import com.example.movies.data.model.Movie
 import com.example.movies.data.model.Review
 import com.example.movies.data.model.Trailer
+import com.example.movies.utils.datatypes.Result
 import io.reactivex.Single
 
 interface NetworkApi {
 
-    fun getMovies(sortMethod: SortTypes, page: Int): Single<List<Movie>>
+    fun getMovies(sortMethod: SortTypes, page: Int): Single<Result<List<Movie>>>
 
     fun getMovieByID(movieId: Int): Single<Movie>
 
