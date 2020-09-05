@@ -1,7 +1,8 @@
 package com.example.movies.data.model
 
-abstract class MovieAbstractDB {
+import com.example.movies.repository.model.Movie
 
+abstract class MovieDB {
     abstract val id: Int
     abstract val voteCount: Int?
     abstract val title: String
@@ -12,7 +13,22 @@ abstract class MovieAbstractDB {
     abstract val backdropPath: String
     abstract val voteAverage: Double?
     abstract val releaseDate: String
-
-    //for saving order of movies in recyclers
     abstract var localId: Int?
+
+    fun toMovie(): Movie {
+        return Movie(
+            id,
+            voteCount,
+            title,
+            originalTitle,
+            overview,
+            posterPath,
+            bigPosterPath,
+            backdropPath,
+            voteAverage,
+            releaseDate,
+            localId
+        )
+    }
+
 }

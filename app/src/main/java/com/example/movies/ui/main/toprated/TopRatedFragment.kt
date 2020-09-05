@@ -8,16 +8,13 @@ import android.widget.AbsListView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.movies.R
-import com.example.movies.ui.detail.DetailActivity
 import com.example.movies.ui.main.MovieListAdapter
 import com.example.movies.utils.NpaGridLayoutManager
 import com.example.movies.utils.datatypes.NetworkState
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.fragment_popularity.*
 import kotlinx.android.synthetic.main.fragment_popularity.recyclerViewPosters
 import kotlinx.android.synthetic.main.fragment_top_rated.*
 
@@ -25,8 +22,7 @@ class TopRatedFragment : Fragment() {
 
     private lateinit var viewModel: TopRatedViewModel
     private val layoutManager = NpaGridLayoutManager(context, 2)
-    private val adapter = MovieListAdapter()
-
+    private lateinit var adapter: MovieListAdapter
     private var isScrolling = false
 
     override fun onCreateView(
@@ -37,6 +33,7 @@ class TopRatedFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        adapter = MovieListAdapter(context)
 
         initViewModel()
         initListeners()
@@ -54,10 +51,16 @@ class TopRatedFragment : Fragment() {
                 if (viewModel.listIsEmpty() && it == NetworkState.LOADING) View.VISIBLE else View.GONE
 
             txt_error_top_rated.visibility =
-                if (viewModel.listIsEmpty() && it == NetworkState.ERROR) View.VISIBLE else View.GONE
+                if (viewModel.listIsEmpty() && it == NetworkState.CONNECTION_LOST) View.VISIBLE else View.GONE
 
-            if (!viewModel.listIsEmpty() && it == NetworkState.ERROR) {
+            if (!viewModel.listIsEmpty() && it == NetworkState.CONNECTION_LOST) {
                 Snackbar.make(activity!!.VPMain, R.string.connection_error, Snackbar.LENGTH_LONG).show()
+            }
+
+            if (it == NetworkState.CONNECTION_RESTORED) {
+                Snackbar.make(activity!!.VPMain, getString(R.string.connection_restored), Snackbar.LENGTH_SHORT).show()
+                recyclerViewPosters.stopScroll()
+                layoutManager.scrollToPosition(1)
             }
         })
     }
@@ -68,14 +71,6 @@ class TopRatedFragment : Fragment() {
     }
 
     private fun initListeners() {
-//        adapter.onPosterClickListener = object :
-//            MovieListAdapter.OnPosterClickListener {
-//            override fun onPosterClick(position: Int) {
-//                val id = adapter.movies[position].id
-//                val intent = DetailActivity.getIntent(context!!, id, false)
-//                startActivity(intent)
-//            }
-//        }
 
         recyclerViewPosters.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
@@ -98,4 +93,5 @@ class TopRatedFragment : Fragment() {
             }
         })
     }
+
 }

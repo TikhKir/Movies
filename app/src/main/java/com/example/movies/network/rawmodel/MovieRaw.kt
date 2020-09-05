@@ -1,7 +1,7 @@
 package com.example.movies.network.rawmodel
 
-import com.example.movies.data.model.Movie
 import com.example.movies.network.services.BaseService
+import com.example.movies.repository.model.Movie
 import com.google.gson.annotations.SerializedName
 
 
@@ -49,7 +49,7 @@ data class MovieRaw(
     val genreIds: List<Long>? = null
 ) {
 
-    fun toMovieDB(): Movie {
+    fun toMovie(): Movie {
         return Movie(
             id,
             voteCount,
@@ -63,6 +63,7 @@ data class MovieRaw(
             releaseDate
         )
     }
+
 
     private fun buildPosterPath(posterPath: String): String {
         return BaseService.BASE_POSTER_URL + BaseService.SMALL_POSTER_SIZE + posterPath

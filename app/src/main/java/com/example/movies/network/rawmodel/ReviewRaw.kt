@@ -1,6 +1,6 @@
 package com.example.movies.network.rawmodel
 
-import com.example.movies.data.model.Review
+import com.example.movies.repository.model.Review
 import com.google.gson.annotations.SerializedName
 
 
@@ -18,7 +18,7 @@ data class ReviewRaw(
     val url: String = ""
 ) {
 
-    fun toReviewDB(): Review {
+    fun toReview(): Review {
         return Review(
             author,
             content

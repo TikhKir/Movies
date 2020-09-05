@@ -4,5 +4,7 @@ enum class ResultType {
     FROM_NW,
     FROM_DB,
     INIT,
-    ERROR
+    ERROR,
+    MOVIE_FAV,
+    MOVIE_NOT_FAV
 }

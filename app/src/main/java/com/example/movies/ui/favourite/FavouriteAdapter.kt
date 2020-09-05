@@ -1,22 +1,22 @@
 package com.example.movies.ui.favourite
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.example.movies.R
-import com.example.movies.data.model.Movie
-import com.squareup.picasso.Picasso
+import com.example.movies.repository.model.Movie
+import com.example.movies.ui.detail.DetailActivity
+import com.example.movies.utils.diffutil.Identified
+import com.example.movies.utils.diffutil.IdentityDiffUtilCallback
 import kotlinx.android.synthetic.main.favourite_item.view.*
 
-class FavouriteAdapter : RecyclerView.Adapter<FavouriteAdapter.FavouriteViewHolder>() {
+class FavouriteAdapter(val context: Context?) : ListAdapter<Identified, RecyclerView.ViewHolder>(IdentityDiffUtilCallback<Identified>()) {
 
-    var onFavouriteItemClickListener : OnFavouriteItemClickListener? = null
-    var favouriteMovies = listOf<Movie>()
-    set(value) {
-        field = value
-        notifyDataSetChanged()
-    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FavouriteViewHolder {
         val view =
@@ -24,35 +24,29 @@ class FavouriteAdapter : RecyclerView.Adapter<FavouriteAdapter.FavouriteViewHold
         return FavouriteViewHolder(view)
     }
 
-    override fun getItemCount(): Int {
-        return favouriteMovies.size
-    }
-
-    override fun onBindViewHolder(holder: FavouriteViewHolder, position: Int) {
-        Picasso.get()
-            .load(favouriteMovies[position].posterPath)
-            .into(holder.imageViewPoster)
-        holder.textViewTitle.text = favouriteMovies[position].title
-        holder.textViewDate.text = favouriteMovies[position].releaseDate
-        val votes =
-            favouriteMovies[position].voteAverage.toString() + " (" + favouriteMovies[position].voteCount + " оценок всего" + ")"
-        holder.textViewDescription.text = votes
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        val movie = getItem(position) as Movie
+        (holder as FavouriteViewHolder).bind(movie)
     }
 
     inner class FavouriteViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        init {
-            super.itemView.setOnClickListener{
-                onFavouriteItemClickListener?.onFavouriteItemClick(adapterPosition)
+
+        fun bind(movie: Movie) {
+            Glide.with(itemView.context)
+                .load(movie.posterPath)
+                .transition(DrawableTransitionOptions.withCrossFade())
+                .into(itemView.ImageViewFavouritePoster)
+            itemView.textViewFavouriteItemTitle.text = movie.title
+            itemView.textViewFavouriteItemDate.text = movie.releaseDate
+            val votes = "${movie.voteAverage} (${movie.voteCount} оценок всего)"
+            itemView.textViewFavouriteItemDescription.text = votes
+
+            itemView.setOnClickListener {
+                val intent = DetailActivity.getIntent(context!!, movie.id)
+                context.startActivity(intent)
             }
         }
-
-        val imageViewPoster = itemView.ImageViewFavouritePoster
-        val textViewTitle = itemView.textViewFavouriteItemTitle
-        val textViewDate = itemView.textViewFavouriteItemDate
-        val textViewDescription = itemView.textViewFavouriteItemDescription
     }
 
-    interface OnFavouriteItemClickListener {
-        fun onFavouriteItemClick(position: Int)
-    }
+
 }

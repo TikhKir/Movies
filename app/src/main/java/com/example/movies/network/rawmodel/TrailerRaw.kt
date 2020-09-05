@@ -1,7 +1,7 @@
 package com.example.movies.network.rawmodel
 
-import com.example.movies.data.model.Trailer
 import com.example.movies.network.services.BaseService
+import com.example.movies.repository.model.Trailer
 import com.google.gson.annotations.SerializedName
 
 
@@ -31,8 +31,11 @@ data class TrailerRaw(
     val type: String = ""
 ) {
 
-    fun toTrailerDB(): Trailer {
-        return Trailer(name, buildYouTubeUrl(key))
+    fun toTrailer(): Trailer {
+        return Trailer(
+            name,
+            buildYouTubeUrl(key)
+        )
     }
 
     private fun buildYouTubeUrl(key: String): String {

@@ -4,21 +4,22 @@ import android.app.Application
 import android.util.Log
 import com.example.movies.constants.SortTypes
 import com.example.movies.data.DataApiImpl
-import com.example.movies.data.model.Movie
 import com.example.movies.network.NetworkApiImpl
+import com.example.movies.repository.model.Movie
+import com.example.movies.repository.model.Review
+import com.example.movies.repository.model.Trailer
 import com.example.movies.utils.datatypes.Result
 import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
 
 class RepositoryApiImpl(application: Application): RepositoryApi {
 
-    val networkSource = NetworkApiImpl()
-    val databaseSource = DataApiImpl(application)
+    private val networkSource = NetworkApiImpl()
+    private val databaseSource = DataApiImpl(application)
 
 
     override fun getMoviesPage(sortTypes: SortTypes, page: Int): Observable<Result<List<Movie>>> {
         return  getMoviesFromNetworkWithCaching(sortTypes, page)
-//            .startWith(databaseSource.getMoviesBySearchMethod(sortTypes).toObservable())
             .onErrorResumeNext(databaseSource.getMoviesBySearchMethod(sortTypes).toObservable())
     }
 
@@ -31,7 +32,7 @@ class RepositoryApiImpl(application: Application): RepositoryApi {
                     databaseSource.upsertMovie(it, sortTypes)
                     temp++
                 }
-//                Log.e("INSERT", "$temp ${sortTypes.name}" )
+                Log.e("INSERT", "$temp ${sortTypes.name}" )
             }
             .observeOn(Schedulers.io())
             .toObservable()
@@ -41,13 +42,30 @@ class RepositoryApiImpl(application: Application): RepositoryApi {
 
 
 
-    override fun getMovieById(movieId: Int): Observable<Movie> {
-        TODO("Not yet implemented")
+    override fun getMovieById(movieId: Int): Observable<Result<Movie>> {
+        return databaseSource.getMovieById(movieId)
+            .toObservable()
     }
 
-    //private fun saveMovieToCache(movie: Movie, sortTypes: SortTypes)
+    override fun addMovieToFavourite(movieId: Int) {
+        databaseSource.addMovieToFavourite(movieId)
+    }
 
-    //private fun getMoviesFromCache(sortTypes: SortTypes): Observable<List<Movie>>
+    override fun deleteMovieFromFavourite(movieId: Int) {
+        databaseSource.deleteMovieFromFavourite(movieId)
+    }
 
-    //получать с бд все сразу скопом а из сети постранично, стирать данные из бд приполучении актуальных
+    override fun getReviewsById(movieId: Int): Observable<List<Review>> {
+        return networkSource.getReviewById(movieId)
+            .toObservable()
+    }
+
+    override fun getTrailersById(movieId: Int): Observable<List<Trailer>> {
+        return networkSource.getTrailerById(movieId)
+            .toObservable()
+    }
+
+    override fun getFavouriteMovies(): Observable<List<Movie>> {
+        return databaseSource.getFavouriteMovies()
+    }
 }

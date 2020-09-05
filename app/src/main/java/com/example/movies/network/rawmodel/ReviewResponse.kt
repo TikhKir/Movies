@@ -2,12 +2,15 @@ package com.example.movies.network.rawmodel
 
 import com.google.gson.annotations.SerializedName
 
-data class MovieResponse(
+data class ReviewResponse(
+    @SerializedName("id")
+    val id: Int,
+
     @SerializedName("page")
     val page: Int,
 
     @SerializedName("results")
-    val movieListRaw: List<MovieRaw>,
+    val reviewListRaw: List<ReviewRaw>,
 
     @SerializedName("total_pages")
     val totalPages: Int,

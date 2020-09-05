@@ -15,4 +15,5 @@
     <string name="delete_from_favourite">удалено из избранного</string>
     <string name="voted_all"> голосов всего)</string>
     <string name="connection_error">Проблемы с подключением!</string>
+    <string name="connection_restored">Подключение восстановлено</string>
 </resources>

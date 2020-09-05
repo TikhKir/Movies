@@ -5,8 +5,8 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.movies.constants.SortTypes
-import com.example.movies.data.model.Movie
 import com.example.movies.repository.RepositoryApiImpl
+import com.example.movies.repository.model.Movie
 import com.example.movies.utils.datatypes.NetworkState
 import com.example.movies.utils.datatypes.Result
 import com.example.movies.utils.datatypes.ResultType
@@ -38,10 +38,10 @@ class PopularityViewModel(application: Application) : BaseViewModel(application)
 //                    }
                 }, {
                     Log.e("VM POP ERROR", it.message)
-                    networkStateLiveData.postValue(NetworkState.ERROR)
+                    networkStateLiveData.postValue(NetworkState.CONNECTION_LOST)
                 }, {
                     Log.e("GETPOP", "COMPLETE")
-                    if (listIsEmpty()) networkStateLiveData.postValue(NetworkState.ERROR)
+                    if (listIsEmpty()) networkStateLiveData.postValue(NetworkState.CONNECTION_LOST)
                 })
         )
     }
@@ -84,7 +84,7 @@ class PopularityViewModel(application: Application) : BaseViewModel(application)
                 moviesCumulativeList.addAll(result.data as List<Movie>)
                 moviesLiveData.postValue(moviesCumulativeList)
                 Log.e("###", "NW -> DB #$page")
-                networkStateLiveData.postValue(NetworkState.ERROR)
+                networkStateLiveData.postValue(NetworkState.CONNECTION_LOST)
                 page = 1
             }
 
@@ -92,7 +92,7 @@ class PopularityViewModel(application: Application) : BaseViewModel(application)
                 moviesCumulativeList.addAll(result.data as List<Movie>)
                 moviesLiveData.postValue(moviesCumulativeList)
                 Log.e("###", "INIT -> DB #$page")
-                networkStateLiveData.postValue(NetworkState.ERROR)
+                networkStateLiveData.postValue(NetworkState.CONNECTION_LOST)
                 page = 1
             }
 

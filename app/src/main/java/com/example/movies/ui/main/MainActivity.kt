@@ -35,7 +35,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-
         setupViewPager()
     }
 

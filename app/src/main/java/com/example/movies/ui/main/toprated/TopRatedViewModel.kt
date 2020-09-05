@@ -5,8 +5,8 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.movies.constants.SortTypes
-import com.example.movies.data.model.Movie
 import com.example.movies.repository.RepositoryApiImpl
+import com.example.movies.repository.model.Movie
 import com.example.movies.utils.datatypes.NetworkState
 import com.example.movies.utils.datatypes.Result
 import com.example.movies.utils.datatypes.ResultType
@@ -24,9 +24,6 @@ class TopRatedViewModel(application: Application) : BaseViewModel(application) {
 
     init {
         loadTopRated()
-        //todo IndexOutOfBoundsException: Inconsistency detected. Invalid item position 120(offset:140)
-        // .state:127 androidx.recyclerview.widget.RecyclerView
-        //todo java.lang.IndexOutOfBoundsException: Empty list doesn't contain element at index 19.
     }
 
     fun loadTopRated() {
@@ -35,22 +32,22 @@ class TopRatedViewModel(application: Application) : BaseViewModel(application) {
             repository.getMoviesPage(SortTypes.TOP_RATED, page)
                 .compose(RxComposers.applyObservableSchedulers())
                 .subscribe({
-                    popularityResponseManager(it)
+                    handlePopularityResponse(it)
 //                    it.data?.map {
 //                        Log.e("VM GETPOP", " ${it.title} #${it.id}" )
 //                    }
                 }, {
                     Log.e("VM POP ERROR", it.message)
-                    networkStateLiveData.postValue(NetworkState.ERROR)
+                    networkStateLiveData.postValue(NetworkState.CONNECTION_LOST)
                 }, {
                     Log.e("GETPOP", "COMPLETE")
-                    if (listIsEmpty()) networkStateLiveData.postValue(NetworkState.ERROR)
+                    if (listIsEmpty()) networkStateLiveData.postValue(NetworkState.CONNECTION_LOST)
                 })
         )
     }
 
 
-    private fun popularityResponseManager(result: Result<List<Movie>>) {
+    private fun handlePopularityResponse(result: Result<List<Movie>>) {
         when {
             result.resultType == ResultType.FROM_NW && previousResult == ResultType.FROM_NW -> {
                 moviesCumulativeList.addAll(result.data as List<Movie>)
@@ -73,7 +70,7 @@ class TopRatedViewModel(application: Application) : BaseViewModel(application) {
                 moviesCumulativeList.addAll(result.data as List<Movie>)
                 moviesLiveData.postValue(moviesCumulativeList)
                 Log.e("###", "DB -> NW #$page")
-                networkStateLiveData.postValue(NetworkState.LOADED)
+                networkStateLiveData.postValue(NetworkState.CONNECTION_RESTORED)
                 page++
             }
 
@@ -84,11 +81,8 @@ class TopRatedViewModel(application: Application) : BaseViewModel(application) {
             }
 
             result.resultType == ResultType.FROM_DB && previousResult == ResultType.FROM_NW -> {
-                moviesCumulativeList.clear()
-                moviesCumulativeList.addAll(result.data as List<Movie>)
-                moviesLiveData.postValue(moviesCumulativeList)
                 Log.e("###", "NW -> DB #$page")
-                networkStateLiveData.postValue(NetworkState.ERROR)
+                networkStateLiveData.postValue(NetworkState.CONNECTION_LOST)
                 page = 1
             }
 
@@ -96,7 +90,7 @@ class TopRatedViewModel(application: Application) : BaseViewModel(application) {
                 moviesCumulativeList.addAll(result.data as List<Movie>)
                 moviesLiveData.postValue(moviesCumulativeList)
                 Log.e("###", "INIT -> DB #$page")
-                networkStateLiveData.postValue(NetworkState.ERROR)
+                networkStateLiveData.postValue(NetworkState.CONNECTION_LOST)
                 page = 1
             }
 

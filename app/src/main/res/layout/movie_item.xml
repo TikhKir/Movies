@@ -3,23 +3,48 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    app:cardCornerRadius="3dp"
-    android:layout_margin="3dp"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:focusable="true"
+    android:layout_margin="3dp"
     android:clickable="true"
-    android:layout_width="match_parent">
+    android:focusable="true"
+    app:cardBackgroundColor="@color/colorPrimary"
+    app:cardCornerRadius="3dp">
 
-    <ImageView
-        android:id="@+id/imageViewSmallPoster"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:scaleType="fitXY"
-        android:adjustViewBounds="true"
-        android:contentDescription="@string/poster_of_film"
-        tools:srcCompat="@tools:sample/backgrounds/scenic">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-    </ImageView>
+        <ImageView
+            android:id="@+id/imageViewSmallPoster"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/poster_of_film"
+            android:scaleType="fitXY"
+            tools:srcCompat="@tools:sample/backgrounds/scenic"
+            android:transitionName="transitionPoster"/>
+
+        <TextView
+            android:id="@+id/textViewPosterTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white_color"
+            android:textSize="12sp"
+            android:layout_marginStart="3dp"
+            android:textStyle="bold"
+            tools:text="Movie" />
+
+        <TextView
+            android:id="@+id/textViewPosterDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white_color"
+            android:layout_marginStart="3dp"
+            android:textSize="12sp"
+            tools:text="2019" />
+
+    </LinearLayout>
 
 </androidx.cardview.widget.CardView>
-

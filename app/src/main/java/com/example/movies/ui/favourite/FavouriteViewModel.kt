@@ -1,28 +1,31 @@
 package com.example.movies.ui.favourite
 
 import android.app.Application
-import com.example.movies.data.model.Movie
-import com.example.movies.data.MoviesDatabase
+import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import com.example.movies.repository.RepositoryApiImpl
+import com.example.movies.repository.model.Movie
 import com.example.movies.utils.rxutils.BaseViewModel
-import io.reactivex.Observable
-import io.reactivex.schedulers.Schedulers
+import com.example.movies.utils.rxutils.RxComposers
 
-class FavouriteViewModel(application: Application): BaseViewModel(application) {
+class FavouriteViewModel(application: Application) : BaseViewModel(application) {
 
-    private val database = MoviesDatabase.getInstance(getApplication())
+    private val repository = RepositoryApiImpl(application)
 
-
-    fun getFavouriteMovies(): Observable<List<Movie>> {
-        return database.moviesDao().getAllFavouriteMovies()
-            .subscribeOn(Schedulers.io())
+    fun loadFavourite(): LiveData<List<Movie>> {
+        val liveData = MutableLiveData<List<Movie>>()
+        execute(
+            repository.getFavouriteMovies()
+                .compose(RxComposers.applyObservableSchedulers())
+                .subscribe({
+                    liveData.postValue(it)
+                }, {
+                    Log.e("FAVOURITE ERROR", it.message)
+                })
+        )
+        return liveData
     }
-
-
-
-
-
-
-
 
 
 }

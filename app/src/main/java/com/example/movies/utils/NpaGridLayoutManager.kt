@@ -4,7 +4,7 @@ import android.content.Context
 import android.util.AttributeSet
 import androidx.recyclerview.widget.GridLayoutManager
 
-//for remove predicting animations in main recyclerView
+//for remove predicting animations in main recyclerViews
 class NpaGridLayoutManager : GridLayoutManager {
 
     override fun supportsPredictiveItemAnimations(): Boolean {

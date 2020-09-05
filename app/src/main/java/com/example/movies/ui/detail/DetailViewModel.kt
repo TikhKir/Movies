@@ -2,103 +2,107 @@ package com.example.movies.ui.detail
 
 import android.app.Application
 import android.util.Log
-import com.example.movies.data.model.Movie
-import com.example.movies.data.MoviesDatabase
-import com.example.movies.data.model.Review
-import com.example.movies.data.model.Trailer
-import com.example.movies.utils.JSONUtils
-import com.example.movies.utils.NetworkUtils
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import com.example.movies.repository.RepositoryApiImpl
+import com.example.movies.repository.model.Movie
+import com.example.movies.repository.model.Review
+import com.example.movies.repository.model.Trailer
+import com.example.movies.utils.datatypes.ResultType
 import com.example.movies.utils.rxutils.BaseViewModel
+import com.example.movies.utils.rxutils.RxComposers
 import io.reactivex.Completable
-import io.reactivex.CompletableObserver
-import io.reactivex.Observable
-import io.reactivex.Single
-import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 
-class DetailViewModel(application: Application) : BaseViewModel(application) {
-    private val database = MoviesDatabase.getInstance(getApplication())
+class DetailViewModel(application: Application, movieId: Int) : BaseViewModel(application) {
+
+    val liveDataReview: LiveData<List<Review>> by lazy { loadReviews(movieId) }
+    val liveDataTrailers: LiveData<List<Trailer>> by lazy { loadTrailers(movieId) }
+
+    private val repository = RepositoryApiImpl(getApplication())
+    private var isFavourite = false
+    private var movie: Movie? = null
 
 
-//    fun getMovieById(movieId: Int): Observable<Movie?> {
-//        return NetworkUtils.getMovieByID(movieId)
-//            .map { JSONUtils.getMovieDataFromJsonObject(it) }
-//            .subscribeOn(Schedulers.io())
-//            .doOnSuccess {
-//                it?.let { database.moviesDao().newUpsertMovie(
-//                    it.id,
-//                    it.voteCount,
-//                    it.title,
-//                    it.originalTitle,
-//                    it.overview,
-//                    it.posterPath,
-//                    it.bigPosterPath,
-//                    it.backdropPath,
-//                    it.voteAverage,
-//                    it.releaseDate,
-//                    it.isFavourite,
-//                    0
-//                )}
-//            }
-//            .toObservable()
-//            .onErrorResumeNext(database.moviesDao().getMovieById(movieId))
-//
-//    }
-
-    fun getReviews(movieId: Int): Single<List<Review>> {
-        return NetworkUtils.getJSONForReviews(movieId)
-            .map { JSONUtils.getListReviewsDataFromJsonObject(it) }
-            .subscribeOn(Schedulers.io())
+    fun loadMovie(movieId: Int): LiveData<Movie> {
+        val liveDataMovie = MutableLiveData<Movie>()
+        execute(
+            repository.getMovieById(movieId)
+                .compose(RxComposers.applyObservableSchedulers())
+                .subscribe({
+                    when (it.resultType) {
+                        ResultType.MOVIE_NOT_FAV -> isFavourite = false
+                        ResultType.MOVIE_FAV -> isFavourite = true
+                    }
+                    liveDataMovie.postValue(it.data)
+                    movie = it.data
+                }, {
+                    Log.e("LOAD MOVIE ERROR", it.message)
+                })
+        )
+        return liveDataMovie
     }
 
-    fun getTrailers(movieId: Int): Single<List<Trailer>> {
-        return NetworkUtils.getJSONForVideos(movieId)
-            .map { JSONUtils.getListTrailersDataFromJsonObject(it) }
-            .subscribeOn(Schedulers.io())
+    fun addMovieToFavourite() {
+        movie?.let {
+            execute(
+                Completable.fromAction {
+                    repository.addMovieToFavourite(it.id)
+                }.subscribeOn(Schedulers.io())
+                    .subscribe({
+                        Log.e("TO FAV", "ADD")
+                    }, {
+                        Log.e("ADD TO FAV", it.message)
+                    })
+            )
+        }
     }
 
-
-    fun addMovieToFavourite(movie: Movie) {
-        Completable.fromAction {
-            database.moviesDao().setAsFavourite(movie.id)
-        }.subscribeOn(Schedulers.io())
-            .subscribe(object : CompletableObserver {
-                override fun onComplete() {
-                    Log.e("FAVOURITE_SET", "SET COMPLETE!")
-                }
-
-                override fun onSubscribe(d: Disposable) {
-                    Log.e("FAVOURITE_SET", "ON SUBSCRIBE!")
-                }
-
-                override fun onError(e: Throwable) {
-                    Log.e("FAVOURITE_SET", e.message)
-                }
-
-            })
+    fun deleteFromFavourite() {
+        movie?.let {
+            execute(
+                Completable.fromAction {
+                    repository.deleteMovieFromFavourite(it.id)
+                }.subscribeOn(Schedulers.io())
+                    .subscribe({
+                        Log.e("FROM FAV", "DELETE")
+                    }, {
+                        Log.e("DELETE FROM FAV", it.message)
+                    })
+            )
+        }
     }
 
-    fun deleteFromFavourite(movie: Movie) {
-        Completable.fromAction {
-            database.moviesDao().setAsNotFavourite(movie.id)
-        }.subscribeOn(Schedulers.io())
-            .subscribe(object : CompletableObserver {
-                override fun onComplete() {
-                    Log.e("FAVOURITE_UNSET", "UNSET COMPLETE!")
-                }
-
-                override fun onSubscribe(d: Disposable) {
-                    Log.e("FAVOURITE_UNSET", "ON SUBSCRIBE!")
-                }
-
-                override fun onError(e: Throwable) {
-                    Log.e("FAVOURITE_UNSET", e.message)
-                }
-
-            })
+    fun isFavourite(): Boolean {
+        return isFavourite
     }
 
+    private fun loadReviews(movieId: Int): LiveData<List<Review>> {
+        val liveData = MutableLiveData<List<Review>>()
+        execute(
+            repository.getReviewsById(movieId)
+                .compose(RxComposers.applyObservableSchedulers())
+                .subscribe({
+                    liveData.postValue(it)
+                }, {
+                    Log.e("REVIEW ERROR", it.message)
+                })
+        )
+        return liveData
+    }
 
-
+    private fun loadTrailers(movieId: Int): LiveData<List<Trailer>> {
+        val liveData = MutableLiveData<List<Trailer>>()
+        execute(
+            repository.getTrailersById(movieId)
+                .compose(RxComposers.applyObservableSchedulers())
+                .subscribe({
+                    liveData.postValue(it)
+                },{
+                    Log.e("TRAILER ERROR", it.message)
+                })
+        )
+        return liveData
+    }
 
 }

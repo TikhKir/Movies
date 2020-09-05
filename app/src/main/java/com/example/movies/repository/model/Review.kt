@@ -1,4 +1,4 @@
-package com.example.movies.data.model
+package com.example.movies.repository.model
 
 import com.example.movies.utils.diffutil.Identified
 
