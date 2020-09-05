@@ -37,8 +37,10 @@ class DetailActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail)
 
+
         initViewModel()
         initListeners()
+        initRecyclerViews()
     }
 
     private fun initViewModel() {
@@ -64,7 +66,7 @@ class DetailActivity : AppCompatActivity() {
             trailerAdapter.submitList(it.toList())
         })
 
-        initRecyclerViews()
+
     }
 
     private fun setMovieInfo(movie: Movie) {
@@ -99,12 +101,10 @@ class DetailActivity : AppCompatActivity() {
     }
 
     private fun initRecyclerViews() {
-        recyclerViewTrailers.setHasFixedSize(true)
         recyclerViewTrailers.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         recyclerViewTrailers.adapter = trailerAdapter
 
-        recyclerViewReviews.setHasFixedSize(true)
         recyclerViewReviews.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         recyclerViewReviews.adapter = reviewAdapter
