@@ -34,6 +34,11 @@ class NetworkApiImpl : NetworkApi {
             .map { Result.networkSuccess(it) }
     }
 
+    override fun searchMovie(query: String, year: Int?, adult: Boolean): Single<List<Movie>> {
+        return baseService.searchMovie(query, year, adult)
+            .map { it.movieListRaw.map { it.toMovie() } }
+    }
+
     override fun getTrailerById(movieId: Int): Single<List<Trailer>> {
         return baseService.getTrailerById(movieId)
             .map { it.trailerListRaw.map { it.toTrailer() } }

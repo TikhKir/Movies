@@ -12,7 +12,7 @@ class MoviePopDB(
      override val overview: String = "",
      override val posterPath: String = "",
      override val bigPosterPath: String = "",
-     override val backdropPath: String = "",
+     override val backdropPath: String? = "",
      override val voteAverage: Double? = null,
      override val releaseDate: String = ""
 

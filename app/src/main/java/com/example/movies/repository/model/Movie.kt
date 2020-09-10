@@ -12,7 +12,7 @@ data class Movie(
     val overview: String = "",
     val posterPath: String = "",
     val bigPosterPath: String = "",
-    val backdropPath: String = "",
+    val backdropPath: String? = "",
     val voteAverage: Double? = null,
     val releaseDate: String = "",
     val localId: Int? = null,

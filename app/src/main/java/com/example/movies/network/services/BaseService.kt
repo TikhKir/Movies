@@ -59,4 +59,13 @@ interface BaseService {
         //@Query(PARAMS_LANGUAGE) language: String = LANGUAGE_VALUE,
         @Query(PARAMS_API_KEY) apiKey: String = API_KEY
     ): Single<ReviewResponse>
+
+    @GET("search/movie")
+    fun searchMovie(
+        @Query("query") query: String,
+        @Query("primary_release_year") year: Int?,
+        @Query("include_adult") adult: Boolean,
+        @Query(PARAMS_LANGUAGE) language: String = LANGUAGE_VALUE,
+        @Query(PARAMS_API_KEY) apiKey: String = API_KEY
+    ): Single<MovieResponse>
 }

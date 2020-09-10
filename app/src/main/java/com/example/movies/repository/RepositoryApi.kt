@@ -22,4 +22,6 @@ interface RepositoryApi {
     fun getTrailersById(movieId: Int): Observable<List<Trailer>>
 
     fun getFavouriteMovies(): Observable<List<Movie>>
+
+    fun searchMovie(query: String, year: Int?, adult: Boolean): Observable<List<Movie>>
 }

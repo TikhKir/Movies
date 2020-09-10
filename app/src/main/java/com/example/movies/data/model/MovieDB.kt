@@ -10,7 +10,7 @@ abstract class MovieDB {
     abstract val overview: String
     abstract val posterPath: String
     abstract val bigPosterPath: String
-    abstract val backdropPath: String
+    abstract val backdropPath: String?
     abstract val voteAverage: Double?
     abstract val releaseDate: String
     abstract var localId: Int?

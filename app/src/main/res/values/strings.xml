@@ -3,7 +3,7 @@
     <string name="poster_of_film">Постер к фильму</string>
     <string name="most_popular">ПОПУЛЯРНОЕ</string>
     <string name="top_rated">РЕЙТИНГОВОЕ</string>
-    <string name="itemMain">Главная</string>
+    <string name="itemSearch">Поиск</string>
     <string name="itemFavourite">Избранное</string>
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
@@ -16,4 +16,10 @@
     <string name="voted_all"> голосов всего)</string>
     <string name="connection_error">Проблемы с подключением!</string>
     <string name="connection_restored">Подключение восстановлено</string>
+    <string name="search_item">Поиск</string>
+
+    <string name="search_title">Поиск фильма</string>
+    <string name="safe_search">Безопасный поиск</string>
+    <string name="release_date">Дата релиза</string>
+    <string name="enter_release_year">Введите год релиза...</string>
 </resources>

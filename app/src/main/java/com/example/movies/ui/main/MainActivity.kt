@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
 import com.example.movies.R
 import com.example.movies.ui.favourite.FavouriteActivity
+import com.example.movies.ui.search.SearchActivity
 import com.google.android.material.tabs.TabLayoutMediator
 import io.reactivex.plugins.RxJavaPlugins
 import kotlinx.android.synthetic.main.activity_main.*
@@ -64,8 +65,7 @@ class MainActivity : AppCompatActivity() {
 
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        val inflater = menuInflater
-        inflater.inflate(R.menu.main_menu, menu)
+        menuInflater.inflate(R.menu.main_menu, menu)
         return super.onCreateOptionsMenu(menu)
     }
 
@@ -73,6 +73,11 @@ class MainActivity : AppCompatActivity() {
         when (item.itemId) {
             R.id.menuItemFavourite -> {
                 val intent = Intent(this, FavouriteActivity::class.java)
+                startActivity(intent)
+            }
+
+            R.id.menuItemSearch -> {
+                val intent = Intent(this, SearchActivity::class.java)
                 startActivity(intent)
             }
 

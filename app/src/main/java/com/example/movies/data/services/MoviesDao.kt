@@ -59,7 +59,7 @@ interface MoviesDao {
         overview: String,
         posterPath: String,
         bigPosterPath: String,
-        backdropPath: String,
+        backdropPath: String?,
         voteAverage: Double?,
         releaseDate: String
     )
@@ -73,7 +73,7 @@ interface MoviesDao {
         overview: String,
         posterPath: String,
         bigPosterPath: String,
-        backdropPath: String,
+        backdropPath: String?,
         voteAverage: Double?,
         releaseDate: String
     )
@@ -87,7 +87,7 @@ interface MoviesDao {
         overview: String,
         posterPath: String,
         bigPosterPath: String,
-        backdropPath: String,
+        backdropPath: String?,
         voteAverage: Double?,
         releaseDate: String
     ) {
@@ -133,7 +133,7 @@ interface MoviesDao {
         overview: String,
         posterPath: String,
         bigPosterPath: String,
-        backdropPath: String,
+        backdropPath: String?,
         voteAverage: Double?,
         releaseDate: String
     )
@@ -147,7 +147,7 @@ interface MoviesDao {
         overview: String,
         posterPath: String,
         bigPosterPath: String,
-        backdropPath: String,
+        backdropPath: String?,
         voteAverage: Double?,
         releaseDate: String
     )
@@ -161,7 +161,7 @@ interface MoviesDao {
         overview: String,
         posterPath: String,
         bigPosterPath: String,
-        backdropPath: String,
+        backdropPath: String?,
         voteAverage: Double?,
         releaseDate: String
     ) {

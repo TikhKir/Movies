@@ -38,7 +38,10 @@ class RepositoryApiImpl(application: Application): RepositoryApi {
             .toObservable()
     }
 
-
+    override fun searchMovie(query: String, year: Int?, adult: Boolean): Observable<List<Movie>> {
+        return networkSource.searchMovie(query, year, adult)
+            .toObservable()
+    }
 
 
 

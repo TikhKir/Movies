@@ -16,4 +16,6 @@ interface NetworkApi {
     fun getTrailerById(movieId: Int): Single<List<Trailer>>
 
     fun getReviewById(movieId: Int): Single<List<Review>>
+
+    fun searchMovie(query: String, year: Int?, adult: Boolean): Single<List<Movie>>
 }
