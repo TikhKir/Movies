@@ -19,7 +19,6 @@ class SearchAdapter(val context: Context?) : ListAdapter<Identified, RecyclerVie
     IdentityDiffUtilCallback<Identified>()
 ) {
 
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchViewHolder {
         val view =
             LayoutInflater.from(parent.context).inflate(R.layout.favourite_item, parent, false)

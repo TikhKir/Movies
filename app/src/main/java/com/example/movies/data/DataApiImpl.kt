@@ -50,8 +50,8 @@ class DataApiImpl(val application: Application) : DataApi {
         }
     }
 
-    override fun addMovieToFavourite(movieId: Int) {
-        database.moviesDao().addMovieToFavourite(movieId)
+    override fun addMovieToFavourite(movie: Movie) {
+        database.moviesDao().addMovieToFavourite(movie.toMovieFavourite())
     }
 
     override fun deleteMovieFromFavourite(movieId: Int) {
@@ -59,33 +59,11 @@ class DataApiImpl(val application: Application) : DataApi {
     }
 
     private fun upsertTopRatedMovie(movie: Movie) {
-        database.moviesDao().upsertTopRatedMovie(
-            movie.id,
-            movie.voteCount,
-            movie.title,
-            movie.originalTitle,
-            movie.overview,
-            movie.posterPath,
-            movie.bigPosterPath,
-            movie.backdropPath,
-            movie.voteAverage,
-            movie.releaseDate
-        )
+        database.moviesDao().upsertTopRatedMovie(movie.toMovieTopDB())
     }
 
     private fun upsertPopularityMovie(movie: Movie) {
-        database.moviesDao().upsertPopularityMovie(
-            movie.id,
-            movie.voteCount,
-            movie.title,
-            movie.originalTitle,
-            movie.overview,
-            movie.posterPath,
-            movie.bigPosterPath,
-            movie.backdropPath,
-            movie.voteAverage,
-            movie.releaseDate
-        )
+        database.moviesDao().upsertPopularityMovie(movie.toMoviePopDB())
     }
 
 }

@@ -11,21 +11,66 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.example.movies.R
 import com.example.movies.repository.model.Movie
 import com.example.movies.ui.detail.DetailActivity
+import com.example.movies.utils.datatypes.NetworkState
 import com.example.movies.utils.diffutil.Identified
 import com.example.movies.utils.diffutil.IdentityDiffUtilCallback
 import kotlinx.android.synthetic.main.movie_item.view.*
+import kotlinx.android.synthetic.main.netstate_item.view.*
 
 class MovieListAdapter(val context: Context?) :
     ListAdapter<Identified, RecyclerView.ViewHolder>(IdentityDiffUtilCallback<Identified>()) {
 
+    private var netState: NetworkState? = null
+    val VIEWTYPE_MOVIE = 1
+    val VIEWTYPE_NETSTATE = 2
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.movie_item, parent, false)
-        return MovieViewHolder(view)
+        val view: View
+        return when (viewType) {
+            VIEWTYPE_MOVIE -> {
+                view = LayoutInflater.from(parent.context).inflate(R.layout.movie_item, parent, false)
+                MovieViewHolder(view)
+            }
+            else -> {
+                view = LayoutInflater.from(parent.context).inflate(R.layout.netstate_item, parent, false)
+                NetStateViewHolder(view)
+            }
+        }
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        val movie = getItem(position) as Movie
-        (holder as MovieViewHolder).bind(movie)
+        if (getItemViewType(position) == VIEWTYPE_MOVIE) {
+            val movie = getItem(position) as Movie
+            (holder as MovieViewHolder).bind(movie)
+        } else {
+            (holder as NetStateViewHolder).bind(netState)
+        }
+    }
+
+
+
+    private fun hasNetStateRow(): Boolean {
+        return netState != null && netState != NetworkState.LOADED
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return if (hasNetStateRow() && position == itemCount - 1) VIEWTYPE_NETSTATE
+        else VIEWTYPE_MOVIE
+    }
+
+    override fun getItemCount(): Int {
+        return super.getItemCount() + if (hasNetStateRow()) 1 else 0
+    }
+
+
+
+
+    inner class NetStateViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        fun bind(netState: NetworkState?) {
+            if (netState != null && netState == NetworkState.LOADING)
+                itemView.progress_bar_item.visibility = View.VISIBLE
+            else itemView.progress_bar_item.visibility = View.GONE
+        }
     }
 
     inner class MovieViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -45,5 +90,13 @@ class MovieListAdapter(val context: Context?) :
         }
     }
 
-
+    fun setNetState(netState: NetworkState) {
+        this.netState = netState
+        when (netState) {
+            NetworkState.LOADING ->
+                if (!hasNetStateRow()) notifyItemInserted(super.getItemCount())
+            else ->
+                if (hasNetStateRow()) notifyItemRemoved(super.getItemCount())
+        }
+    }
 }

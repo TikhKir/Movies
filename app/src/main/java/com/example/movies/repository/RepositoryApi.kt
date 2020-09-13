@@ -13,7 +13,7 @@ interface RepositoryApi {
 
     fun getMovieById(movieId: Int): Observable<Result<Movie>>
 
-    fun addMovieToFavourite(movieId: Int)
+    fun addMovieToFavourite(movie: Movie)
 
     fun deleteMovieFromFavourite(movieId: Int)
 

@@ -8,6 +8,7 @@ import android.widget.AbsListView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.movies.R
 import com.example.movies.ui.main.MovieListAdapter
@@ -21,7 +22,7 @@ import kotlinx.android.synthetic.main.fragment_top_rated.*
 class TopRatedFragment : Fragment() {
 
     private lateinit var viewModel: TopRatedViewModel
-    private val layoutManager = NpaGridLayoutManager(context, 2)
+    private lateinit var layoutManager: NpaGridLayoutManager
     private lateinit var adapter: MovieListAdapter
     private var isScrolling = false
 
@@ -62,16 +63,24 @@ class TopRatedFragment : Fragment() {
                 recyclerViewPosters.stopScroll()
                 layoutManager.scrollToPosition(1)
             }
+
+            if (!viewModel.listIsEmpty()) adapter.setNetState(it)
         })
     }
 
     private fun initRecyclerView() {
+        layoutManager = NpaGridLayoutManager(context, 2)
+        layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+            override fun getSpanSize(position: Int): Int {
+                val viewType = adapter.getItemViewType(position)
+                return if (viewType == adapter.VIEWTYPE_MOVIE) 1 else 2
+            }
+        }
         recyclerViewPosters.layoutManager = layoutManager
         recyclerViewPosters.adapter = adapter
     }
 
     private fun initListeners() {
-
         recyclerViewPosters.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)

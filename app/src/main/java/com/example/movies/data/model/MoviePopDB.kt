@@ -1,9 +1,13 @@
 package com.example.movies.data.model
 
 import androidx.room.Entity
+import androidx.room.Index
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "movies_popularity")
+@Entity(
+     tableName = "movies_popularity",
+     indices = [Index(value = ["id"], unique = true)]
+)
 class MoviePopDB(
      override val id: Int,
      override val voteCount: Int? = null,
@@ -16,8 +20,7 @@ class MoviePopDB(
      override val voteAverage: Double? = null,
      override val releaseDate: String = ""
 
-) : MovieDB()
-{
+) : MovieDB() {
     @PrimaryKey(autoGenerate = true)
-     override var localId: Int? = null
+    override var localId: Int? = null
 }

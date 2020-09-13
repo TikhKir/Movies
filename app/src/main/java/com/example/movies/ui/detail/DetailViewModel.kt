@@ -31,7 +31,8 @@ class DetailViewModel(application: Application, movieId: Int) : BaseViewModel(ap
                 .compose(RxComposers.applyObservableSchedulers())
                 .subscribe({
                     when (it.resultType) {
-                        ResultType.MOVIE_NOT_FAV -> isFavourite = false
+                        ResultType.MOVIE_NOT_FAV,
+                        ResultType.FROM_NW -> isFavourite = false
                         ResultType.MOVIE_FAV -> isFavourite = true
                     }
                     liveDataMovie.postValue(it.data)
@@ -47,7 +48,7 @@ class DetailViewModel(application: Application, movieId: Int) : BaseViewModel(ap
         movie?.let {
             execute(
                 Completable.fromAction {
-                    repository.addMovieToFavourite(it.id)
+                    repository.addMovieToFavourite(it)
                 }.subscribeOn(Schedulers.io())
                     .subscribe({
                         Log.e("TO FAV", "ADD")

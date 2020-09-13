@@ -9,7 +9,7 @@ import com.example.movies.data.model.MoviePopDB
 import com.example.movies.data.model.MovieTopDB
 import com.example.movies.data.services.MoviesDao
 
-@Database(entities = [MovieTopDB::class, MoviePopDB::class, MovieFavourite::class], version = 13, exportSchema = false)
+@Database(entities = [MovieTopDB::class, MoviePopDB::class, MovieFavourite::class], version = 14, exportSchema = false)
 abstract class MoviesDatabase: RoomDatabase() {
 
     companion object {

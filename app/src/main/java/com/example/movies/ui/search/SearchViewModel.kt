@@ -27,6 +27,7 @@ class SearchViewModel(application: Application): BaseViewModel(application) {
                     networkStateLiveData.postValue(NetworkState.LOADED)
                 },{
                     Log.e("SEARCH_GET_ERROR", it.message)
+                    it.printStackTrace()
                     networkStateLiveData.postValue(NetworkState.CONNECTION_LOST)
                 })
         )

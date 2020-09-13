@@ -1,5 +1,6 @@
 package com.example.movies.ui.search
 
+import android.annotation.SuppressLint
 import android.app.SearchManager
 import android.content.Context
 import android.os.Bundle
@@ -14,6 +15,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.movies.R
 import com.example.movies.utils.datatypes.NetworkState
+import com.example.movies.utils.keyboard.KeyboardUtil.Companion.hideKeyboard
 import com.example.movies.utils.rxutils.Rxview.RxViewUtil
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -35,7 +37,6 @@ class SearchActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
 
-
         initViewModel()
         initRecyclerView()
     }
@@ -47,8 +48,9 @@ class SearchActivity : AppCompatActivity() {
         searchView = menu?.findItem(R.id.action_search)?.actionView as SearchView
         searchView.setSearchableInfo(searchManager.getSearchableInfo(componentName))
         searchView.maxWidth = Int.MAX_VALUE
+        //searchView.requestFocus()
 
-        initViewListeners()
+        initRxViewListeners()
         return true
     }
 
@@ -75,28 +77,32 @@ class SearchActivity : AppCompatActivity() {
         })
     }
 
+
+    @SuppressLint("ClickableViewAccessibility")
     private fun initRecyclerView() {
         recyclerViewSearch.layoutManager = LinearLayoutManager(this)
         recyclerViewSearch.adapter = adapter
+
+        recyclerViewSearch.setOnTouchListener { v, _ -> v.hideKeyboard()  }
     }
 
-    private fun initViewListeners() {
+    private fun initRxViewListeners() {
         compositeDisposable.add(
             Observable.combineLatest(
                 getRawRequest(),
                 getRawDate(),
-                getRawSafeness(),
+                getRawAdult(),
                 Function3<String, String, Boolean, Triple<String, String, Boolean>>
-                { request, date, safeness -> Triple(request, date, safeness) }
+                { request, date, adult -> Triple(request, date, adult) }
             )
                 .debounce(500, TimeUnit.MILLISECONDS)
                 .distinctUntilChanged()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
                     Toast.makeText(this, "${it.first} ${it.second} ${it.third}", Toast.LENGTH_SHORT).show()
-                    if (it.second != "") viewModel.searchMovie(it.first, it.second.toIntOrNull(), it.third)
+                    if (it.first != "") viewModel.searchMovie(it.first, it.second.toIntOrNull(), it.third)
                 }, {
-                    Log.e("RXViewError", it.message )
+                    Log.e("RXViewError1", it.message )
                 })
         )
     }
@@ -117,10 +123,10 @@ class SearchActivity : AppCompatActivity() {
         return RxViewUtil.getSearchViewTextObservable(searchView)
     }
 
-    private fun getRawSafeness(): Observable<Boolean> {
+    private fun getRawAdult(): Observable<Boolean> {
         return RxViewUtil.getCheckBoxStateObservable(checkBoxAdult)
+            .map { !it }
     }
-
 
     override fun onDestroy() {
         compositeDisposable.dispose()

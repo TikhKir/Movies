@@ -20,7 +20,8 @@ class RepositoryApiImpl(application: Application): RepositoryApi {
 
     override fun getMoviesPage(sortTypes: SortTypes, page: Int): Observable<Result<List<Movie>>> {
         return  getMoviesFromNetworkWithCaching(sortTypes, page)
-            .onErrorResumeNext(databaseSource.getMoviesBySearchMethod(sortTypes).toObservable())
+            .onErrorResumeNext(databaseSource.getMoviesBySearchMethod(sortTypes)
+                .toObservable())
     }
 
     private fun getMoviesFromNetworkWithCaching(sortTypes: SortTypes, page: Int): Observable<Result<List<Movie>>> {
@@ -47,11 +48,12 @@ class RepositoryApiImpl(application: Application): RepositoryApi {
 
     override fun getMovieById(movieId: Int): Observable<Result<Movie>> {
         return databaseSource.getMovieById(movieId)
+            .switchIfEmpty(networkSource.getMovieByID(movieId))
             .toObservable()
     }
 
-    override fun addMovieToFavourite(movieId: Int) {
-        databaseSource.addMovieToFavourite(movieId)
+    override fun addMovieToFavourite(movie: Movie) {
+        databaseSource.addMovieToFavourite(movie)
     }
 
     override fun deleteMovieFromFavourite(movieId: Int) {
