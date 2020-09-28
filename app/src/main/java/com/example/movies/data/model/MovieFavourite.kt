@@ -18,7 +18,7 @@ class MovieFavourite(
      override val bigPosterPath: String = "",
      override val backdropPath: String? = "",
      override val voteAverage: Double? = null,
-     override val releaseDate: String = ""
+     override val releaseDate: String? = ""
 
 ) : MovieDB() {
     @PrimaryKey(autoGenerate = true)

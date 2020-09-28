@@ -3,6 +3,7 @@ package com.example.movies.ui.detail
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
@@ -13,6 +14,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.example.movies.R
 import com.example.movies.repository.model.Movie
+import com.example.movies.utils.datatypes.NetworkState
 import kotlinx.android.synthetic.main.activity_detail.*
 
 class DetailActivity : AppCompatActivity() {
@@ -44,13 +46,14 @@ class DetailActivity : AppCompatActivity() {
     }
 
     private fun initViewModel() {
+        supportActionBar?.title = getString(R.string.loading)
+
         var movieId = -1
         if (intent.hasExtra(EXTRA_MOVIE_ID)) {
             movieId = intent.getIntExtra(EXTRA_MOVIE_ID, -1)
         } else finish()
 
         viewModel = getViewModel(movieId)
-
 
         viewModel.loadMovie(movieId).observe(this, Observer {
             movie = it
@@ -66,7 +69,14 @@ class DetailActivity : AppCompatActivity() {
             trailerAdapter.submitList(it.toList())
         })
 
-
+        viewModel.liveDataNetworkState.observe(this, Observer {
+            progress_bar_detail.visibility =
+                if (it == NetworkState.LOADING) View.VISIBLE else View.GONE
+            view_hide_screen.visibility =
+                if (it == NetworkState.LOADING) View.VISIBLE else View.GONE
+            txt_error_detail.visibility =
+                if (it == NetworkState.CONNECTION_LOST) View.VISIBLE else View.GONE
+        })
     }
 
     private fun setMovieInfo(movie: Movie) {
@@ -75,7 +85,7 @@ class DetailActivity : AppCompatActivity() {
             .transition(DrawableTransitionOptions.withCrossFade())
             .thumbnail(
                 Glide.with(this)
-                .load(movie.posterPath)
+                    .load(movie.posterPath)
             )
             .into(imageViewBigPoster)
         supportActionBar?.title = movie.title

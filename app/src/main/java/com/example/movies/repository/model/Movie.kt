@@ -15,7 +15,7 @@ data class Movie(
     val bigPosterPath: String = "",
     val backdropPath: String? = "",
     val voteAverage: Double? = null,
-    val releaseDate: String = "",
+    val releaseDate: String? = "",
     val localId: Int? = null,
     override val identifier: Int = id
 

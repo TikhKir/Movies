@@ -16,7 +16,6 @@ class SearchViewModel(application: Application): BaseViewModel(application) {
     private val moviesLiveData = MutableLiveData<List<Movie>>()
     private val networkStateLiveData = MutableLiveData<NetworkState>()
 
-
     fun searchMovie(query: String, year: Int?, adult: Boolean) {
         networkStateLiveData.postValue(NetworkState.LOADING)
         execute(
@@ -27,7 +26,6 @@ class SearchViewModel(application: Application): BaseViewModel(application) {
                     networkStateLiveData.postValue(NetworkState.LOADED)
                 },{
                     Log.e("SEARCH_GET_ERROR", it.message)
-                    it.printStackTrace()
                     networkStateLiveData.postValue(NetworkState.CONNECTION_LOST)
                 })
         )

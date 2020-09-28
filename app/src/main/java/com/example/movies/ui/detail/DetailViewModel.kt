@@ -8,6 +8,7 @@ import com.example.movies.repository.RepositoryApiImpl
 import com.example.movies.repository.model.Movie
 import com.example.movies.repository.model.Review
 import com.example.movies.repository.model.Trailer
+import com.example.movies.utils.datatypes.NetworkState
 import com.example.movies.utils.datatypes.ResultType
 import com.example.movies.utils.rxutils.BaseViewModel
 import com.example.movies.utils.rxutils.RxComposers
@@ -18,6 +19,7 @@ class DetailViewModel(application: Application, movieId: Int) : BaseViewModel(ap
 
     val liveDataReview: LiveData<List<Review>> by lazy { loadReviews(movieId) }
     val liveDataTrailers: LiveData<List<Trailer>> by lazy { loadTrailers(movieId) }
+    val liveDataNetworkState = MutableLiveData<NetworkState>()
 
     private val repository = RepositoryApiImpl(getApplication())
     private var isFavourite = false
@@ -26,6 +28,7 @@ class DetailViewModel(application: Application, movieId: Int) : BaseViewModel(ap
 
     fun loadMovie(movieId: Int): LiveData<Movie> {
         val liveDataMovie = MutableLiveData<Movie>()
+        liveDataNetworkState.postValue(NetworkState.LOADING)
         execute(
             repository.getMovieById(movieId)
                 .compose(RxComposers.applyObservableSchedulers())
@@ -37,8 +40,10 @@ class DetailViewModel(application: Application, movieId: Int) : BaseViewModel(ap
                     }
                     liveDataMovie.postValue(it.data)
                     movie = it.data
+                    liveDataNetworkState.postValue(NetworkState.LOADED)
                 }, {
                     Log.e("LOAD MOVIE ERROR", it.message)
+                    liveDataNetworkState.postValue(NetworkState.CONNECTION_LOST)
                 })
         )
         return liveDataMovie

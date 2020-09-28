@@ -22,4 +22,9 @@
     <string name="safe_search">Безопасный поиск</string>
     <string name="release_date">Дата релиза</string>
     <string name="enter_release_year">Введите год релиза...</string>
+    <string name="original_title">Оригинальное название</string>
+    <string name="rating">Рейтинг</string>
+    <string name="discription">Описание</string>
+    <string name="loading">Загрузка...</string>
+    <string name="empty_description">Описание отсутствует</string>
 </resources>

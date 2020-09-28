@@ -26,13 +26,23 @@ import java.util.concurrent.TimeUnit
 
 class SearchActivity : AppCompatActivity() {
 
+    companion object {
+        const val SEARCH_VIEW_QUERY_KEY = "SEARCH_VIEW_QUERY_KEY"
+    }
+
     private lateinit var searchView: SearchView
     private lateinit var viewModel: SearchViewModel
     private var compositeDisposable = CompositeDisposable()
     private val adapter = SearchAdapter(this)
 
+    private var searchQuery: CharSequence? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         supportActionBar?.title = getString(R.string.search_title)
+
+        if (savedInstanceState != null) {
+            searchQuery = savedInstanceState.getCharSequence(SEARCH_VIEW_QUERY_KEY)
+        }
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
@@ -48,7 +58,10 @@ class SearchActivity : AppCompatActivity() {
         searchView = menu?.findItem(R.id.action_search)?.actionView as SearchView
         searchView.setSearchableInfo(searchManager.getSearchableInfo(componentName))
         searchView.maxWidth = Int.MAX_VALUE
-        //searchView.requestFocus()
+
+        if (searchQuery != null) searchView.setQuery(searchQuery, true)
+        searchView.isIconified = false
+
 
         initRxViewListeners()
         return true
@@ -102,7 +115,7 @@ class SearchActivity : AppCompatActivity() {
                     Toast.makeText(this, "${it.first} ${it.second} ${it.third}", Toast.LENGTH_SHORT).show()
                     if (it.first != "") viewModel.searchMovie(it.first, it.second.toIntOrNull(), it.third)
                 }, {
-                    Log.e("RXViewError1", it.message )
+                    Log.e("RXViewError", it.message )
                 })
         )
     }
@@ -126,6 +139,12 @@ class SearchActivity : AppCompatActivity() {
     private fun getRawAdult(): Observable<Boolean> {
         return RxViewUtil.getCheckBoxStateObservable(checkBoxAdult)
             .map { !it }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        searchQuery = searchView.query
+        outState.putCharSequence(SEARCH_VIEW_QUERY_KEY, searchQuery)
     }
 
     override fun onDestroy() {

@@ -95,7 +95,7 @@ class TopRatedFragment : Fragment() {
                 val pastVisibleItem = layoutManager.findFirstCompletelyVisibleItemPosition()
                 val total = adapter.itemCount
 
-                if (isScrolling && (visibleItemCount + pastVisibleItem >= total - 6)) {
+                if (isScrolling && (visibleItemCount + pastVisibleItem == total)) {
                     isScrolling = false
                     viewModel.loadTopRated()
                 }

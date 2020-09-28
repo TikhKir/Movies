@@ -15,7 +15,7 @@ class RxViewUtil {
             var isFirst = true
             return Observable.create<String> { obsEmitter ->
                 if (isFirst) {
-                    obsEmitter.onNext("")
+                    obsEmitter.onNext(editText.text.toString())
                     isFirst = false
                 }
                 editText.addTextChangedListener(object : TextWatcher {
@@ -40,7 +40,12 @@ class RxViewUtil {
         }
 
         fun getSearchViewTextObservable(searchView: SearchView): Observable<String> {
+            var isFirst = true
             return Observable.create { obsEmitter ->
+                if (isFirst) {
+                    obsEmitter.onNext(searchView.query.toString())
+                    isFirst = false
+                }
                 searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                     override fun onQueryTextSubmit(query: String?): Boolean {
                         return true
@@ -59,7 +64,7 @@ class RxViewUtil {
             var isFirst = true
             return Observable.create { obsEmitter ->
                 if (isFirst) {
-                    obsEmitter.onNext(true)
+                    obsEmitter.onNext(checkBox.isChecked)
                     isFirst = false
                 }
                 checkBox.setOnCheckedChangeListener(object :

@@ -12,7 +12,7 @@ abstract class MovieDB {
     abstract val bigPosterPath: String
     abstract val backdropPath: String?
     abstract val voteAverage: Double?
-    abstract val releaseDate: String
+    abstract val releaseDate: String?
     abstract var localId: Int?
 
     fun toMovie(): Movie {

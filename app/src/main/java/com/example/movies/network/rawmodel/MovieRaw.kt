@@ -31,7 +31,7 @@ data class MovieRaw(
     val voteAverage: Double? = null,
 
     @SerializedName("release_date")
-    val releaseDate: String = "",
+    val releaseDate: String? = "",
 
     @SerializedName("popularity")
     val popularity: Float? = null,

@@ -14,14 +14,15 @@
 
         <ImageView
             android:id="@+id/imageViewBigPoster"
-            android:layout_width="0dp"
-            android:adjustViewBounds="true"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:scaleType="center"
+            android:adjustViewBounds="false"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@mipmap/ic_launcher_round"
-            android:transitionName="transitionPoster"/>
+            app:srcCompat="@mipmap/ic_launcher_round" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guidelineCenter"
@@ -37,7 +38,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="24dp"
-            android:text="Оригинальное название"
+            android:text="@string/original_title"
             android:textColor="@color/white_color"
             android:textStyle="bold"
             app:layout_constraintEnd_toStartOf="@+id/guidelineCenter"
@@ -51,7 +52,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:layout_marginEnd="8dp"
-            android:text="TextView"
+            tools:text="Самый лучший фильм"
             android:textColor="@color/white_color"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/guidelineCenter"
@@ -63,7 +64,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:text="Рейтинг"
+            android:text="@string/rating"
             android:textColor="@color/white_color"
             android:textStyle="bold"
             app:layout_constraintEnd_toStartOf="@+id/guidelineCenter"
@@ -78,7 +79,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
-            android:text="TextView"
+            tools:text="100500"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/guidelineCenter"
             app:layout_constraintTop_toBottomOf="@+id/textViewOriginalTitle" />
@@ -89,7 +90,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:text="Дата релиза"
+            android:text="@string/release_date"
             android:textColor="@color/white_color"
             android:textStyle="bold"
             app:layout_constraintEnd_toStartOf="@+id/guidelineCenter"
@@ -104,7 +105,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
-            android:text="TextView"
+            tools:text="2000-10-12"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/guidelineCenter"
             app:layout_constraintTop_toBottomOf="@+id/textViewRating" />
@@ -115,7 +116,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:text="Описание"
+            android:text="@string/discription"
             android:textColor="@color/white_color"
             android:textStyle="bold"
             app:layout_constraintEnd_toStartOf="@+id/guidelineCenter"
@@ -130,7 +131,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
-            android:text="TextView"
+            android:text="@string/empty_description"
             android:textColor="@color/white_color"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -173,6 +174,38 @@
             app:layout_constraintTop_toBottomOf="@+id/recyclerViewTrailers"
             tools:listitem="@layout/item_review"
             />
+
+        <View
+            android:id="@+id/view_hide_screen"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:visibility="visible"
+            android:background="@color/colorPrimaryDark"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ProgressBar
+            android:id="@+id/progress_bar_detail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/txt_error_detail"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Connection error!"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

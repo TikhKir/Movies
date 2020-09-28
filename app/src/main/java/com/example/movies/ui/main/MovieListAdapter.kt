@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.example.movies.R
@@ -78,10 +79,11 @@ class MovieListAdapter(val context: Context?) :
         fun bind(movie: Movie) {
             Glide.with(itemView.context)
                 .load(movie.posterPath)
+                .placeholder(CircularProgressDrawable(itemView.context))
                 .transition(DrawableTransitionOptions.withCrossFade())
                 .into(itemView.imageViewSmallPoster)
             itemView.textViewPosterTitle.text = movie.title
-            itemView.textViewPosterDate.text = movie.releaseDate.take(4)
+            itemView.textViewPosterDate.text = movie.releaseDate?.take(4)
 
             itemView.setOnClickListener {
                 val intent = DetailActivity.getIntent(context!!, movie.id)
