@@ -1,11 +1,13 @@
 package com.example.movies.ui.main.popularity
 
-import android.app.Application
 import android.util.Log
+import androidx.hilt.Assisted
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.SavedStateHandle
 import com.example.movies.constants.SortTypes
-import com.example.movies.repository.RepositoryApiImpl
+import com.example.movies.repository.RepositoryApi
 import com.example.movies.repository.model.Movie
 import com.example.movies.utils.datatypes.NetworkState
 import com.example.movies.utils.datatypes.Result
@@ -13,9 +15,12 @@ import com.example.movies.utils.datatypes.ResultType
 import com.example.movies.utils.rxutils.BaseViewModel
 import com.example.movies.utils.rxutils.RxComposers
 
-class PopularityViewModel(application: Application) : BaseViewModel(application) {
+class PopularityViewModel @ViewModelInject constructor(
+    private val repository: RepositoryApi,
+    @Assisted private val state: SavedStateHandle
+) : BaseViewModel() {
 
-    private val repository = RepositoryApiImpl(getApplication())
+
     private val moviesLiveData = MutableLiveData<List<Movie>>()
     private var moviesCumulativeList = mutableListOf<Movie>()
     private val networkStateLiveData = MutableLiveData<NetworkState>()

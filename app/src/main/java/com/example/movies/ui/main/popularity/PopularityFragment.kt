@@ -15,9 +15,11 @@ import com.example.movies.ui.main.MovieListAdapter
 import com.example.movies.utils.NpaGridLayoutManager
 import com.example.movies.utils.datatypes.NetworkState
 import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_popularity.*
 
+@AndroidEntryPoint
 class PopularityFragment : Fragment() {
 
     private lateinit var viewModel: PopularityViewModel

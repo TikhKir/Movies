@@ -11,11 +11,13 @@ import com.example.movies.R
 import com.example.movies.ui.favourite.FavouriteActivity
 import com.example.movies.ui.search.SearchActivity
 import com.google.android.material.tabs.TabLayoutMediator
+import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.plugins.RxJavaPlugins
 import kotlinx.android.synthetic.main.activity_main.*
 import java.io.IOException
 import java.net.SocketException
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var viewPagerAdapter: PagerAdapter

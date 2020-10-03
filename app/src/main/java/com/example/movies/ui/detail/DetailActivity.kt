@@ -7,7 +7,6 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
@@ -15,8 +14,10 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.example.movies.R
 import com.example.movies.repository.model.Movie
 import com.example.movies.utils.datatypes.NetworkState
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_detail.*
 
+@AndroidEntryPoint
 class DetailActivity : AppCompatActivity() {
 
     private lateinit var viewModel: DetailViewModel
@@ -53,7 +54,8 @@ class DetailActivity : AppCompatActivity() {
             movieId = intent.getIntExtra(EXTRA_MOVIE_ID, -1)
         } else finish()
 
-        viewModel = getViewModel(movieId)
+        viewModel = ViewModelProvider(this).get(DetailViewModel::class.java)
+        //viewModel = getViewModel(movieId)
 
         viewModel.loadMovie(movieId).observe(this, Observer {
             movie = it
@@ -134,15 +136,16 @@ class DetailActivity : AppCompatActivity() {
         super.onStop()
         if (isFavourite) viewModel.addMovieToFavourite()
         else viewModel.deleteFromFavourite()
+        //todo: возможно не успевает отрабоать до смерти viewModel...
     }
 
 
-    private fun getViewModel(movieId: Int): DetailViewModel {
-        return ViewModelProvider(this, object : ViewModelProvider.Factory {
-            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-                @Suppress("UNCHECKED_CAST")
-                return DetailViewModel(application, movieId) as T
-            }
-        })[DetailViewModel::class.java]
-    }
+//    private fun getViewModel(movieId: Int): DetailViewModel {
+//        return ViewModelProvider(this, object : ViewModelProvider.Factory {
+//            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+//                @Suppress("UNCHECKED_CAST")
+//                return DetailViewModel(movieId) as T
+//            }
+//        })[DetailViewModel::class.java]
+//    }
 }

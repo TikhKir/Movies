@@ -1,18 +1,22 @@
 package com.example.movies.ui.search
 
-import android.app.Application
 import android.util.Log
+import androidx.hilt.Assisted
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.movies.repository.RepositoryApiImpl
+import androidx.lifecycle.SavedStateHandle
+import com.example.movies.repository.RepositoryApi
 import com.example.movies.repository.model.Movie
 import com.example.movies.utils.datatypes.NetworkState
 import com.example.movies.utils.rxutils.BaseViewModel
 import com.example.movies.utils.rxutils.RxComposers
 
-class SearchViewModel(application: Application): BaseViewModel(application) {
+class SearchViewModel @ViewModelInject constructor(
+    private val repository: RepositoryApi,
+    @Assisted private val state: SavedStateHandle
+): BaseViewModel() {
 
-    private val repository = RepositoryApiImpl(application)
     private val moviesLiveData = MutableLiveData<List<Movie>>()
     private val networkStateLiveData = MutableLiveData<NetworkState>()
 

@@ -1,6 +1,5 @@
 package com.example.movies.network
 
-import com.example.movies.constants.BaseUrl
 import com.example.movies.constants.SortTypes
 import com.example.movies.network.services.BaseService
 import com.example.movies.repository.model.Movie
@@ -8,19 +7,19 @@ import com.example.movies.repository.model.Review
 import com.example.movies.repository.model.Trailer
 import com.example.movies.utils.datatypes.Result
 import io.reactivex.Single
-import retrofit2.Retrofit
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
-import retrofit2.converter.gson.GsonConverterFactory
+import javax.inject.Inject
 
-class NetworkApiImpl : NetworkApi {
+class NetworkApiImpl @Inject constructor(
+    private val baseService: BaseService
+) : NetworkApi {
 
-    private val retrofit = Retrofit.Builder()
-        .addConverterFactory(GsonConverterFactory.create())
-        .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-        .baseUrl(BaseUrl.BASE_URL.url)
-        .build()
-
-    private val baseService = retrofit.create(BaseService::class.java)
+//    private val retrofit = Retrofit.Builder()
+//        .addConverterFactory(GsonConverterFactory.create())
+//        .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+//        .baseUrl(BaseUrl.BASE_URL.url)
+//        .build()
+//
+//    private val baseService = retrofit.create(BaseService::class.java)
 
     override fun getMovies(sortMethod: SortTypes, page: Int): Single<Result<List<Movie>>> {
         return baseService.getMovies(sortMethod.value, page)

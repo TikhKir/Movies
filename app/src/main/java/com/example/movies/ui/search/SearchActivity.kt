@@ -17,6 +17,7 @@ import com.example.movies.R
 import com.example.movies.utils.datatypes.NetworkState
 import com.example.movies.utils.keyboard.KeyboardUtil.Companion.hideKeyboard
 import com.example.movies.utils.rxutils.Rxview.RxViewUtil
+import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -24,6 +25,7 @@ import io.reactivex.functions.Function3
 import kotlinx.android.synthetic.main.activity_search.*
 import java.util.concurrent.TimeUnit
 
+@AndroidEntryPoint
 class SearchActivity : AppCompatActivity() {
 
     companion object {

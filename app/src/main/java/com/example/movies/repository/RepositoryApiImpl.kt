@@ -1,21 +1,21 @@
 package com.example.movies.repository
 
-import android.app.Application
 import android.util.Log
 import com.example.movies.constants.SortTypes
-import com.example.movies.data.DataApiImpl
-import com.example.movies.network.NetworkApiImpl
+import com.example.movies.data.DataApi
+import com.example.movies.network.NetworkApi
 import com.example.movies.repository.model.Movie
 import com.example.movies.repository.model.Review
 import com.example.movies.repository.model.Trailer
 import com.example.movies.utils.datatypes.Result
 import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
+import javax.inject.Inject
 
-class RepositoryApiImpl(application: Application): RepositoryApi {
-
-    private val networkSource = NetworkApiImpl()
-    private val databaseSource = DataApiImpl(application)
+class RepositoryApiImpl @Inject constructor(
+    private val networkSource: NetworkApi,
+    private val databaseSource: DataApi
+): RepositoryApi {
 
 
     override fun getMoviesPage(sortTypes: SortTypes, page: Int): Observable<Result<List<Movie>>> {
