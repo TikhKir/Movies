@@ -20,15 +20,13 @@ import io.reactivex.schedulers.Schedulers
 class DetailViewModel @ViewModelInject constructor(
     private val repository: RepositoryApi,
     @Assisted private val state: SavedStateHandle
-//    ,
-//    movieId: Int
 ) : BaseViewModel() {
 
     val liveDataReview: LiveData<List<Review>> by lazy { loadReviews(movieId) }
     val liveDataTrailers: LiveData<List<Trailer>> by lazy { loadTrailers(movieId) }
     val liveDataNetworkState = MutableLiveData<NetworkState>()
 
-    private var movieId = 547016
+    var movieId = 0
     private var isFavourite = false
     private var movie: Movie? = null
 

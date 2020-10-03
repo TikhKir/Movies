@@ -55,6 +55,7 @@ class DetailActivity : AppCompatActivity() {
         } else finish()
 
         viewModel = ViewModelProvider(this).get(DetailViewModel::class.java)
+        viewModel.movieId = movieId
         //viewModel = getViewModel(movieId)
 
         viewModel.loadMovie(movieId).observe(this, Observer {
@@ -139,13 +140,4 @@ class DetailActivity : AppCompatActivity() {
         //todo: возможно не успевает отрабоать до смерти viewModel...
     }
 
-
-//    private fun getViewModel(movieId: Int): DetailViewModel {
-//        return ViewModelProvider(this, object : ViewModelProvider.Factory {
-//            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-//                @Suppress("UNCHECKED_CAST")
-//                return DetailViewModel(movieId) as T
-//            }
-//        })[DetailViewModel::class.java]
-//    }
 }
