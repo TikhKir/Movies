@@ -13,7 +13,7 @@
     <string name="chucker_response">error_tab_position</string>
     <string name="add_to_favourite">добавлено в избранное</string>
     <string name="delete_from_favourite">удалено из избранного</string>
-    <string name="voted_all"> голосов всего)</string>
+    <string name="voted_all"> голосов всего</string>
     <string name="connection_error">Проблемы с подключением!</string>
     <string name="connection_restored">Подключение восстановлено</string>
     <string name="search_item">Поиск</string>
@@ -24,7 +24,7 @@
     <string name="enter_release_year">Введите год релиза...</string>
     <string name="original_title">Оригинальное название</string>
     <string name="rating">Рейтинг</string>
-    <string name="discription">Описание</string>
+    <string name="description">Описание</string>
     <string name="loading">Загрузка...</string>
     <string name="empty_description">Описание отсутствует</string>
 </resources>

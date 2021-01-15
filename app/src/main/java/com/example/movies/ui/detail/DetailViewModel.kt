@@ -1,11 +1,9 @@
 package com.example.movies.ui.detail
 
 import android.util.Log
-import androidx.hilt.Assisted
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.SavedStateHandle
 import com.example.movies.repository.RepositoryApi
 import com.example.movies.repository.model.Movie
 import com.example.movies.repository.model.Review
@@ -18,8 +16,7 @@ import io.reactivex.Completable
 import io.reactivex.schedulers.Schedulers
 
 class DetailViewModel @ViewModelInject constructor(
-    private val repository: RepositoryApi,
-    @Assisted private val state: SavedStateHandle
+    private val repository: RepositoryApi
 ) : BaseViewModel() {
 
     val liveDataReview: LiveData<List<Review>> by lazy { loadReviews(movieId) }
@@ -33,7 +30,7 @@ class DetailViewModel @ViewModelInject constructor(
 
     fun loadMovie(movieId: Int): LiveData<Movie> {
         val liveDataMovie = MutableLiveData<Movie>()
-        liveDataNetworkState.postValue(NetworkState.LOADING)
+        liveDataNetworkState.value = NetworkState.LOADING
         execute(
             repository.getMovieById(movieId)
                 .compose(RxComposers.applyObservableSchedulers())
@@ -43,12 +40,12 @@ class DetailViewModel @ViewModelInject constructor(
                         ResultType.FROM_NW -> isFavourite = false
                         ResultType.MOVIE_FAV -> isFavourite = true
                     }
-                    liveDataMovie.postValue(it.data)
+                    liveDataMovie.value = it.data
                     movie = it.data
-                    liveDataNetworkState.postValue(NetworkState.LOADED)
+                    liveDataNetworkState.value = NetworkState.LOADED
                 }, {
                     Log.e("LOAD MOVIE ERROR", it.message)
-                    liveDataNetworkState.postValue(NetworkState.CONNECTION_LOST)
+                    liveDataNetworkState.value = NetworkState.CONNECTION_LOST
                 })
         )
         return liveDataMovie
@@ -94,7 +91,7 @@ class DetailViewModel @ViewModelInject constructor(
             repository.getReviewsById(movieId)
                 .compose(RxComposers.applyObservableSchedulers())
                 .subscribe({
-                    liveData.postValue(it)
+                    liveData.value = it
                 }, {
                     Log.e("REVIEW ERROR", it.message)
                 })
@@ -108,7 +105,7 @@ class DetailViewModel @ViewModelInject constructor(
             repository.getTrailersById(movieId)
                 .compose(RxComposers.applyObservableSchedulers())
                 .subscribe({
-                    liveData.postValue(it)
+                    liveData.value = it
                 },{
                     Log.e("TRAILER ERROR", it.message)
                 })

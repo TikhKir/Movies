@@ -1,11 +1,9 @@
 package com.example.movies.ui.main.toprated
 
 import android.util.Log
-import androidx.hilt.Assisted
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.SavedStateHandle
 import com.example.movies.constants.SortTypes
 import com.example.movies.repository.RepositoryApi
 import com.example.movies.repository.model.Movie
@@ -16,8 +14,7 @@ import com.example.movies.utils.rxutils.BaseViewModel
 import com.example.movies.utils.rxutils.RxComposers
 
 class TopRatedViewModel @ViewModelInject constructor(
-    private val repository: RepositoryApi,
-    @Assisted private val state: SavedStateHandle
+    private val repository: RepositoryApi
 ) : BaseViewModel() {
 
     private val moviesLiveData = MutableLiveData<List<Movie>>()
@@ -31,21 +28,17 @@ class TopRatedViewModel @ViewModelInject constructor(
     }
 
     fun loadTopRated() {
-        networkStateLiveData.postValue(NetworkState.LOADING)
+        networkStateLiveData.value = NetworkState.LOADING
         execute(
             repository.getMoviesPage(SortTypes.TOP_RATED, page)
                 .compose(RxComposers.applyObservableSchedulers())
                 .subscribe({
                     handlePopularityResponse(it)
-//                    it.data?.map {
-//                        Log.e("VM GETPOP", " ${it.title} #${it.id}" )
-//                    }
                 }, {
                     Log.e("VM POP ERROR", it.message)
-                    networkStateLiveData.postValue(NetworkState.CONNECTION_LOST)
+                    networkStateLiveData.value = NetworkState.CONNECTION_LOST
                 }, {
-                    Log.e("GETPOP", "COMPLETE")
-                    if (listIsEmpty()) networkStateLiveData.postValue(NetworkState.CONNECTION_LOST)
+                    if (listIsEmpty()) networkStateLiveData.value = NetworkState.CONNECTION_LOST
                 })
         )
     }
@@ -55,53 +48,52 @@ class TopRatedViewModel @ViewModelInject constructor(
         when {
             result.resultType == ResultType.FROM_NW && previousResult == ResultType.FROM_NW -> {
                 moviesCumulativeList.addAll(result.data as List<Movie>)
-                moviesLiveData.postValue(moviesCumulativeList)
+                moviesLiveData.value = moviesCumulativeList
                 Log.e("###", "NW -> NW #$page")
                 page++
-                networkStateLiveData.postValue(NetworkState.LOADED)
+                networkStateLiveData.value = NetworkState.LOADED
             }
 
             result.resultType == ResultType.FROM_NW && previousResult == ResultType.INIT -> {
                 moviesCumulativeList.addAll(result.data as List<Movie>)
-                moviesLiveData.postValue(moviesCumulativeList)
+                moviesLiveData.value = moviesCumulativeList
                 Log.e("###", "INIT -> NW #$page")
                 page++
-                networkStateLiveData.postValue(NetworkState.LOADED)
+                networkStateLiveData.value = NetworkState.LOADED
             }
 
             result.resultType == ResultType.FROM_NW && previousResult == ResultType.FROM_DB -> {
                 moviesCumulativeList.clear()
                 moviesCumulativeList.addAll(result.data as List<Movie>)
-                moviesLiveData.postValue(moviesCumulativeList)
+                moviesLiveData.value = moviesCumulativeList
                 Log.e("###", "DB -> NW #$page")
-                networkStateLiveData.postValue(NetworkState.CONNECTION_RESTORED)
+                networkStateLiveData.value = NetworkState.CONNECTION_RESTORED
                 page++
             }
 
             result.resultType == ResultType.FROM_DB && previousResult == ResultType.FROM_DB -> {
-                // пока бесполезно но пусть повисит
                 Log.e("###", "DB -> DB #$page")
                 page = 1
             }
 
             result.resultType == ResultType.FROM_DB && previousResult == ResultType.FROM_NW -> {
                 Log.e("###", "NW -> DB #$page")
-                networkStateLiveData.postValue(NetworkState.CONNECTION_LOST)
+                networkStateLiveData.value = NetworkState.CONNECTION_LOST
                 page = 1
             }
 
             result.resultType == ResultType.FROM_DB && previousResult == ResultType.INIT -> {
                 moviesCumulativeList.addAll(result.data as List<Movie>)
-                moviesLiveData.postValue(moviesCumulativeList)
+                moviesLiveData.value = moviesCumulativeList
                 Log.e("###", "INIT -> DB #$page")
-                networkStateLiveData.postValue(NetworkState.CONNECTION_LOST)
+                networkStateLiveData.value = NetworkState.CONNECTION_LOST
                 page = 1
             }
 
             else -> {
                 moviesCumulativeList.addAll(result.data as List<Movie>)
-                moviesLiveData.postValue(moviesCumulativeList)
-                networkStateLiveData.postValue(NetworkState.LOADED)
+                moviesLiveData.value = moviesCumulativeList
+                networkStateLiveData.value = NetworkState.LOADED
                 Log.e("###", "ELSE #$page")
                 page++
             }

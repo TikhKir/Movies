@@ -36,7 +36,7 @@ class DataApiImpl @Inject constructor(
             .switchIfEmpty(moviesDao.getMovieById(movieId))
             .map {
                 if (it is MovieFavourite) Result.movieFavourite(it.toMovie())
-                 else Result.movieNotFavourite(it.toMovie())
+                else Result.movieNotFavourite(it.toMovie())
             }
     }
 

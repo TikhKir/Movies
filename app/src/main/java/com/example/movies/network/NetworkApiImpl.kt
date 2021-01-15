@@ -13,14 +13,6 @@ class NetworkApiImpl @Inject constructor(
     private val baseService: BaseService
 ) : NetworkApi {
 
-//    private val retrofit = Retrofit.Builder()
-//        .addConverterFactory(GsonConverterFactory.create())
-//        .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-//        .baseUrl(BaseUrl.BASE_URL.url)
-//        .build()
-//
-//    private val baseService = retrofit.create(BaseService::class.java)
-
     override fun getMovies(sortMethod: SortTypes, page: Int): Single<Result<List<Movie>>> {
         return baseService.getMovies(sortMethod.value, page)
             .map { it.movieListRaw.map { it.toMovie() }}

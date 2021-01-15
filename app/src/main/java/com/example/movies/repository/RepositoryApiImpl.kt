@@ -1,6 +1,5 @@
 package com.example.movies.repository
 
-import android.util.Log
 import com.example.movies.constants.SortTypes
 import com.example.movies.data.DataApi
 import com.example.movies.network.NetworkApi
@@ -28,12 +27,9 @@ class RepositoryApiImpl @Inject constructor(
         return networkSource.getMovies(sortTypes, page)
             .observeOn(Schedulers.single())
             .doOnSuccess {
-                var temp = 0
                 it.data?.map {
                     databaseSource.upsertMovie(it, sortTypes)
-                    temp++
                 }
-                Log.e("INSERT", "$temp ${sortTypes.name}" )
             }
             .observeOn(Schedulers.io())
             .toObservable()

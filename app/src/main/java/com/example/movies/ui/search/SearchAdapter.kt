@@ -39,7 +39,7 @@ class SearchAdapter(val context: Context?) : ListAdapter<Identified, RecyclerVie
                 .into(itemView.ImageViewFavouritePoster)
             itemView.textViewFavouriteItemTitle.text = movie.title
             itemView.textViewFavouriteItemDate.text = movie.releaseDate
-            val votes = "${movie.voteAverage} (${movie.voteCount} оценок всего)"
+            val votes = "${movie.voteAverage} (${movie.voteCount} ${R.string.voted_all})"
             itemView.textViewFavouriteItemDescription.text = votes
 
             itemView.setOnClickListener {

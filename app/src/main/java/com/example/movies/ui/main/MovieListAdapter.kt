@@ -21,19 +21,25 @@ import kotlinx.android.synthetic.main.netstate_item.view.*
 class MovieListAdapter(val context: Context?) :
     ListAdapter<Identified, RecyclerView.ViewHolder>(IdentityDiffUtilCallback<Identified>()) {
 
+    companion object {
+        const val VIEWTYPE_MOVIE = 1
+        private const val VIEWTYPE_NETSTATE = 2
+        private const val SYMBOLS_YEAR = 4
+    }
+
     private var netState: NetworkState? = null
-    val VIEWTYPE_MOVIE = 1
-    val VIEWTYPE_NETSTATE = 2
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val view: View
         return when (viewType) {
             VIEWTYPE_MOVIE -> {
-                view = LayoutInflater.from(parent.context).inflate(R.layout.movie_item, parent, false)
+                view =
+                    LayoutInflater.from(parent.context).inflate(R.layout.movie_item, parent, false)
                 MovieViewHolder(view)
             }
             else -> {
-                view = LayoutInflater.from(parent.context).inflate(R.layout.netstate_item, parent, false)
+                view = LayoutInflater.from(parent.context)
+                    .inflate(R.layout.netstate_item, parent, false)
                 NetStateViewHolder(view)
             }
         }
@@ -49,7 +55,6 @@ class MovieListAdapter(val context: Context?) :
     }
 
 
-
     private fun hasNetStateRow(): Boolean {
         return netState != null && netState != NetworkState.LOADED
     }
@@ -62,8 +67,6 @@ class MovieListAdapter(val context: Context?) :
     override fun getItemCount(): Int {
         return super.getItemCount() + if (hasNetStateRow()) 1 else 0
     }
-
-
 
 
     inner class NetStateViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -83,7 +86,7 @@ class MovieListAdapter(val context: Context?) :
                 .transition(DrawableTransitionOptions.withCrossFade())
                 .into(itemView.imageViewSmallPoster)
             itemView.textViewPosterTitle.text = movie.title
-            itemView.textViewPosterDate.text = movie.releaseDate?.take(4)
+            itemView.textViewPosterDate.text = movie.releaseDate?.take(SYMBOLS_YEAR)
 
             itemView.setOnClickListener {
                 val intent = DetailActivity.getIntent(context!!, movie.id)

@@ -31,9 +31,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        RxJavaPlugins.setErrorHandler{
+        RxJavaPlugins.setErrorHandler {
             if ((it is IOException) || (it is SocketException)) {
-                Log.e("TAG", "ONERRORNEW!")
+                Log.e("RX_ERROR", "ONERRORNEW!")
                 return@setErrorHandler
             }
         }
@@ -63,7 +63,6 @@ class MainActivity : AppCompatActivity() {
             }
         }.attach()
     }
-
 
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

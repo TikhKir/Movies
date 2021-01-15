@@ -22,6 +22,11 @@ import kotlinx.android.synthetic.main.fragment_popularity.*
 @AndroidEntryPoint
 class PopularityFragment : Fragment() {
 
+    companion object {
+        private const val SPAN_COUNT_DEFAULT = 2
+        private const val SPAN_COUNT_ONE = 1
+    }
+
     private lateinit var viewModel: PopularityViewModel
     private lateinit var layoutManager: NpaGridLayoutManager
     private lateinit var adapter: MovieListAdapter
@@ -57,7 +62,8 @@ class PopularityFragment : Fragment() {
                 if (viewModel.listIsEmpty() && it == NetworkState.CONNECTION_LOST) View.VISIBLE else View.GONE
 
             if (!viewModel.listIsEmpty() && it == NetworkState.CONNECTION_LOST) {
-                Snackbar.make(activity!!.VPMain, R.string.connection_error, Snackbar.LENGTH_LONG).show()
+                Snackbar.make(activity!!.VPMain, R.string.connection_error, Snackbar.LENGTH_LONG)
+                    .show()
             }
 
             if (!viewModel.listIsEmpty()) adapter.setNetState(it)
@@ -65,11 +71,11 @@ class PopularityFragment : Fragment() {
     }
 
     private fun initRecyclerView() {
-        layoutManager = NpaGridLayoutManager(context, 2)
+        layoutManager = NpaGridLayoutManager(context, SPAN_COUNT_DEFAULT)
         layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
             override fun getSpanSize(position: Int): Int {
                 val viewType = adapter.getItemViewType(position)
-                return if (viewType == adapter.VIEWTYPE_MOVIE) 1 else 2
+                return if (viewType == MovieListAdapter.VIEWTYPE_MOVIE) SPAN_COUNT_ONE else SPAN_COUNT_DEFAULT
             }
         }
 
@@ -83,7 +89,8 @@ class PopularityFragment : Fragment() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
                 if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL ||
-                    newState == AbsListView.OnScrollListener.SCROLL_STATE_FLING) {
+                    newState == AbsListView.OnScrollListener.SCROLL_STATE_FLING
+                ) {
                     isScrolling = true
                 }
             }
@@ -96,7 +103,6 @@ class PopularityFragment : Fragment() {
                 if (isScrolling && (visibleItemCount + pastVisibleItem == total)) {
                     isScrolling = false
                     viewModel.loadPopularity()
-                    //Log.e("TAG", "${visibleItemCount} ${pastVisibleItem} ${total}")
                 }
             }
         })

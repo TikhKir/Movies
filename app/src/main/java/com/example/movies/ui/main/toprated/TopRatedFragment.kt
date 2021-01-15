@@ -23,6 +23,12 @@ import kotlinx.android.synthetic.main.fragment_top_rated.*
 @AndroidEntryPoint
 class TopRatedFragment : Fragment() {
 
+    companion object {
+        private const val POSITION_FIRST = 1
+        private const val SPAN_COUNT_DEFAULT = 2
+        private const val SPAN_COUNT_ONE = 1
+    }
+
     private lateinit var viewModel: TopRatedViewModel
     private lateinit var layoutManager: NpaGridLayoutManager
     private lateinit var adapter: MovieListAdapter
@@ -63,7 +69,7 @@ class TopRatedFragment : Fragment() {
             if (it == NetworkState.CONNECTION_RESTORED) {
                 Snackbar.make(activity!!.VPMain, getString(R.string.connection_restored), Snackbar.LENGTH_SHORT).show()
                 recyclerViewPosters.stopScroll()
-                layoutManager.scrollToPosition(1)
+                layoutManager.scrollToPosition(POSITION_FIRST)
             }
 
             if (!viewModel.listIsEmpty()) adapter.setNetState(it)
@@ -71,11 +77,11 @@ class TopRatedFragment : Fragment() {
     }
 
     private fun initRecyclerView() {
-        layoutManager = NpaGridLayoutManager(context, 2)
+        layoutManager = NpaGridLayoutManager(context, SPAN_COUNT_DEFAULT)
         layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
             override fun getSpanSize(position: Int): Int {
                 val viewType = adapter.getItemViewType(position)
-                return if (viewType == adapter.VIEWTYPE_MOVIE) 1 else 2
+                return if (viewType == MovieListAdapter.VIEWTYPE_MOVIE) SPAN_COUNT_ONE else SPAN_COUNT_DEFAULT
             }
         }
         recyclerViewPosters.layoutManager = layoutManager

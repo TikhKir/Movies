@@ -19,24 +19,23 @@ data class Movie(
     val localId: Int? = null,
     override val identifier: Int = id
 
-): Identified
-{
-    fun toMovieFavourite(): MovieFavourite{
-       return MovieFavourite(
-           id,
-           voteCount,
-           title,
-           originalTitle,
-           overview,
-           posterPath,
-           bigPosterPath,
-           backdropPath,
-           voteAverage,
-           releaseDate
-       )
+) : Identified {
+    fun toMovieFavourite(): MovieFavourite {
+        return MovieFavourite(
+            id,
+            voteCount,
+            title,
+            originalTitle,
+            overview,
+            posterPath,
+            bigPosterPath,
+            backdropPath,
+            voteAverage,
+            releaseDate
+        )
     }
 
-    fun toMovieTopDB(): MovieTopDB{
+    fun toMovieTopDB(): MovieTopDB {
         return MovieTopDB(
             id,
             voteCount,
@@ -51,7 +50,7 @@ data class Movie(
         )
     }
 
-    fun toMoviePopDB(): MoviePopDB{
+    fun toMoviePopDB(): MoviePopDB {
         return MoviePopDB(
             id,
             voteCount,

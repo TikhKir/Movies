@@ -17,7 +17,6 @@ import kotlinx.android.synthetic.main.favourite_item.view.*
 
 class FavouriteAdapter(val context: Context?) : ListAdapter<Identified, RecyclerView.ViewHolder>(IdentityDiffUtilCallback<Identified>()) {
 
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FavouriteViewHolder {
         val view =
             LayoutInflater.from(parent.context).inflate(R.layout.favourite_item, parent, false)
@@ -38,7 +37,7 @@ class FavouriteAdapter(val context: Context?) : ListAdapter<Identified, Recycler
                 .into(itemView.ImageViewFavouritePoster)
             itemView.textViewFavouriteItemTitle.text = movie.title
             itemView.textViewFavouriteItemDate.text = movie.releaseDate
-            val votes = "${movie.voteAverage} (${movie.voteCount} оценок всего)"
+            val votes = "${movie.voteAverage} (${movie.voteCount} ${R.string.voted_all})"
             itemView.textViewFavouriteItemDescription.text = votes
 
             itemView.setOnClickListener {

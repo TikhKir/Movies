@@ -64,7 +64,6 @@ data class MovieRaw(
         )
     }
 
-
     private fun buildPosterPath(posterPath: String): String {
         return BaseService.BASE_POSTER_URL + BaseService.SMALL_POSTER_SIZE + posterPath
     }
@@ -72,7 +71,6 @@ data class MovieRaw(
     private fun buildBigPosterPath(posterPath: String): String {
         return BaseService.BASE_POSTER_URL + BaseService.BIG_POSTER_SIZE + posterPath
     }
-
 
 
 }

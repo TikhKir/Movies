@@ -56,7 +56,6 @@ class DetailActivity : AppCompatActivity() {
 
         viewModel = ViewModelProvider(this).get(DetailViewModel::class.java)
         viewModel.movieId = movieId
-        //viewModel = getViewModel(movieId)
 
         viewModel.loadMovie(movieId).observe(this, Observer {
             movie = it
