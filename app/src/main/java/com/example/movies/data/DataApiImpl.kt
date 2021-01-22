@@ -22,7 +22,6 @@ class DataApiImpl @Inject constructor(
         }.map {
             Result.databaseSuccess(it.map { it.toMovie() })
         }
-
     }
 
     override fun getFavouriteMovies(): Observable<List<Movie>> {
@@ -45,10 +44,10 @@ class DataApiImpl @Inject constructor(
         moviesDao.deleteTopRatedMovies()
     }
 
-    override fun upsertMovie(movie: Movie, sortMethod: SortTypes) {
+    override fun upsertMovies(moviesList: List<Movie>, sortMethod: SortTypes) {
         when (sortMethod) {
-            SortTypes.TOP_RATED -> upsertTopRatedMovie(movie)
-            SortTypes.POPULARITY -> upsertPopularityMovie(movie)
+            SortTypes.TOP_RATED -> upsertTopRatedMovies(moviesList)
+            SortTypes.POPULARITY -> upsertPopularityMovies(moviesList)
         }
     }
 
@@ -60,12 +59,14 @@ class DataApiImpl @Inject constructor(
         moviesDao.deleteMovieFromFavourite(movieId)
     }
 
-    private fun upsertTopRatedMovie(movie: Movie) {
-        moviesDao.upsertTopRatedMovie(movie.toMovieTopDB())
+    private fun upsertTopRatedMovies(moviesList: List<Movie>) {
+        val transformedList = moviesList.map { it.toMovieTopDB() }
+        moviesDao.upsertTopRatedMovies(transformedList)
     }
 
-    private fun upsertPopularityMovie(movie: Movie) {
-        moviesDao.upsertPopularityMovie(movie.toMoviePopDB())
+    private fun upsertPopularityMovies(moviesList: List<Movie>) {
+        val transformedList = moviesList.map { it.toMoviePopDB() }
+        moviesDao.upsertPopularityMovies(transformedList)
     }
 
 }

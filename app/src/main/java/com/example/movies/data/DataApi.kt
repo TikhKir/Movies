@@ -13,7 +13,7 @@ interface DataApi {
 
     fun deleteAllMovies()
 
-    fun upsertMovie(movie: Movie, sortMethod: SortTypes)
+    fun upsertMovies(moviesList: List<Movie>, sortMethod: SortTypes)
 
     fun addMovieToFavourite(movie: Movie)
 

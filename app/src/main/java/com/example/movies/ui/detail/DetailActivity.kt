@@ -39,7 +39,7 @@ class DetailActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail)
-
+        supportActionBar?.title = getString(R.string.loading)
 
         initViewModel()
         initListeners()
@@ -47,8 +47,6 @@ class DetailActivity : AppCompatActivity() {
     }
 
     private fun initViewModel() {
-        supportActionBar?.title = getString(R.string.loading)
-
         var movieId = -1
         if (intent.hasExtra(EXTRA_MOVIE_ID)) {
             movieId = intent.getIntExtra(EXTRA_MOVIE_ID, -1)
@@ -92,7 +90,7 @@ class DetailActivity : AppCompatActivity() {
             .into(imageViewBigPoster)
         supportActionBar?.title = movie.title
         textViewOriginalTitle.text = movie.originalTitle
-        val voteString = "${movie.voteAverage} (${movie.voteCount} ${getString(R.string.voted_all)}"
+        val voteString = "${movie.voteAverage} (${movie.voteCount} ${getString(R.string.voted_all)})"
         textViewRating.text = voteString
         textViewReleaseDate.text = movie.releaseDate
         textViewDescription.text = movie.overview
@@ -136,7 +134,6 @@ class DetailActivity : AppCompatActivity() {
         super.onStop()
         if (isFavourite) viewModel.addMovieToFavourite()
         else viewModel.deleteFromFavourite()
-        //todo: возможно не успевает отрабоать до смерти viewModel...
     }
 
 }

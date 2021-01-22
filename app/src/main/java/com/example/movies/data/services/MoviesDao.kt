@@ -46,11 +46,11 @@ interface MoviesDao {
 
 
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun upsertTopRatedMovie(movieTopDB: MovieTopDB)
+    @Insert(entity = MovieTopDB::class,  onConflict = OnConflictStrategy.REPLACE)
+    fun upsertTopRatedMovies(moviesList: List<MovieTopDB>)
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun upsertPopularityMovie(moviePopDB: MoviePopDB)
+    @Insert(entity = MoviePopDB::class, onConflict = OnConflictStrategy.REPLACE)
+    fun upsertPopularityMovies(moviesList: List<MoviePopDB>)
 
 
 }

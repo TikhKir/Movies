@@ -31,13 +31,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        RxJavaPlugins.setErrorHandler {
-            if ((it is IOException) || (it is SocketException)) {
-                Log.e("RX_ERROR", "ONERRORNEW!")
-                return@setErrorHandler
-            }
-        }
-
+        initRxErrorHandler()
         setupViewPager()
     }
 
@@ -62,6 +56,15 @@ class MainActivity : AppCompatActivity() {
                 else -> getString(R.string.chucker_response)
             }
         }.attach()
+    }
+
+    private fun initRxErrorHandler() {
+        RxJavaPlugins.setErrorHandler {
+            if ((it is IOException) || (it is SocketException)) {
+                Log.e("RX_ERROR", "ONERRORNEW!")
+                return@setErrorHandler
+            }
+        }
     }
 
 

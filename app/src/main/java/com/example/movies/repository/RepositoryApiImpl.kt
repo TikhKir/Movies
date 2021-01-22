@@ -8,7 +8,6 @@ import com.example.movies.repository.model.Review
 import com.example.movies.repository.model.Trailer
 import com.example.movies.utils.datatypes.Result
 import io.reactivex.Observable
-import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 class RepositoryApiImpl @Inject constructor(
@@ -25,13 +24,11 @@ class RepositoryApiImpl @Inject constructor(
 
     private fun getMoviesFromNetworkWithCaching(sortTypes: SortTypes, page: Int): Observable<Result<List<Movie>>> {
         return networkSource.getMovies(sortTypes, page)
-            .observeOn(Schedulers.single())
             .doOnSuccess {
-                it.data?.map {
-                    databaseSource.upsertMovie(it, sortTypes)
+                it.data?.let { listMovies ->
+                    databaseSource.upsertMovies(listMovies, sortTypes)
                 }
             }
-            .observeOn(Schedulers.io())
             .toObservable()
     }
 
