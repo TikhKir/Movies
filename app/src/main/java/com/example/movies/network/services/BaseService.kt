@@ -1,5 +1,6 @@
 package com.example.movies.network.services
 
+import com.example.movies.BuildConfig
 import com.example.movies.network.rawmodel.MovieRaw
 import com.example.movies.network.rawmodel.MovieResponse
 import com.example.movies.network.rawmodel.ReviewResponse
@@ -12,7 +13,7 @@ import retrofit2.http.Query
 interface BaseService {
 
     companion object {
-        private const val API_KEY = "018f57ebd435772093350921a7d5c2b7"
+        private const val API_KEY = BuildConfig.API_KEY_TMDB
 
         private const val PARAMS_API_KEY = "api_key"
         private const val PARAMS_LANGUAGE = "language"

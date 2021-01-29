@@ -40,14 +40,13 @@ class SearchActivity : AppCompatActivity() {
     private var searchQuery: CharSequence? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_search)
         supportActionBar?.title = getString(R.string.search_title)
 
         if (savedInstanceState != null) {
             searchQuery = savedInstanceState.getCharSequence(SEARCH_VIEW_QUERY_KEY)
         }
-
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_search)
 
         initViewModel()
         initRecyclerView()
