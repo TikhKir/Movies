@@ -17,4 +17,4 @@ Simple android App written in Kotlin with MVVM architecture.
 -   Glide
 
 ## API
-- The Movie DataBase (TMDB)
+- The Movie DataBase (TMDB) (may not be available in some countries, use vpn or proxy)
