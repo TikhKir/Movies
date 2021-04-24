@@ -9,6 +9,9 @@ Simple android App written in Kotlin with MVVM architecture.
 -   Save movies to favourites (offline caching)
 -   Search for films in TMDB database by title 
 
+## Screenshots
+<img  src="https://github.com/TikhKir/Movies/blob/master/screenshots/movies1.jpg?raw=true"  width=23% /> <img  src="https://github.com/TikhKir/Movies/blob/master/screenshots/movies2.jpg?raw=true"  width=23% /> <img  src="https://github.com/TikhKir/Movies/blob/master/screenshots/movies3.jpg?raw=true"  width=23% /> <img  src="https://github.com/TikhKir/Movies/blob/master/screenshots/movies4.jpg?raw=true"  width=23% />
+
 ## Libraries & Dependencies
 -   Retrofit
 -   Room
